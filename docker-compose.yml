@@ -23,3 +23,23 @@ services:
       - './backend:/app'
     ports:
       - 9292:9292
+    depends_on:
+      - db
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_HOST=postgres
+      - DB_NAME=azul
+  db:
+    image: postgres
+    container_name: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=azul
+volumes:
+  db_data:

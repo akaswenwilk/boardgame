@@ -2,6 +2,7 @@
 
 require "bundler/setup"
 require "hanami/api"
+require_relative "config/initializers/database.rb"
 
 class App < Hanami::API
   get "/" do
