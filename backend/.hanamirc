@@ -1,0 +1,3 @@
+project=backend
+test=rspec
+template=erb

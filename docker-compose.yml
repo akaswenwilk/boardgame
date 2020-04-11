@@ -22,4 +22,4 @@ services:
     volumes:
       - './backend:/app'
     ports:
-      - 4567:4567
+      - 9292:9292
