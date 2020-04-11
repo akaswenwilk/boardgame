@@ -3,3 +3,4 @@ source 'https://rubygems.org'
 gem "hanami-api"
 gem "sequel"
 gem "pg"
+gem "rake"

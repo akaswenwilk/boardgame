@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require "bundler/setup"
-require "hanami/api"
-require_relative "config/initializers/database.rb"
+require_relative "./config/initializers/base.rb"
 
 class App < Hanami::API
   get "/" do
