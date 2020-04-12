@@ -1,5 +1,7 @@
 FROM ruby:2.7
 
+RUN apt-get update
+RUN apt-get install vim --assume-yes
 WORKDIR /app
 COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock

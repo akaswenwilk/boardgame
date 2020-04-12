@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "./config/initializers/base.rb"
+require_relative "./app/api.rb"
 
-class App < Hanami::API
-  get "/" do
-    "Hello, world"
-  end
-end
-
-run App.new
+run Api.new

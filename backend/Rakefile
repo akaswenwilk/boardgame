@@ -1,4 +1,4 @@
-database_url = URI::Generic.build(
+Database_url = URI::Generic.build(
   scheme: "postgres",
   userinfo: "#{ENV['DB_USER']}:#{ENV['DB_PASSWORD']}",
   host: ENV["DB_HOST"],

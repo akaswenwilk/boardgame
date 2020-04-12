@@ -1,6 +1,13 @@
 source 'https://rubygems.org'
 
 gem "hanami-api"
+gem "hanami-utils"
 gem "sequel"
 gem "pg"
 gem "rake"
+gem "rspec"
+gem "database_cleaner"
+gem "factory_bot"
+gem "pry"
+gem "pry-nav"
+gem "rack-test"
