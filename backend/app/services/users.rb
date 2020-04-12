@@ -9,6 +9,11 @@ class UserService
     user_repo.generate_token(user_id: new_user_id)
   end
 
+  def login(email:, password:)
+    user_id = user_repo.authenticate(email: email, password: password)
+    user_repo.generate_token(user_id: user_id)
+  end
+
   private
 
   def user_repo

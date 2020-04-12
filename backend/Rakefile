@@ -1,4 +1,4 @@
-Database_url = URI::Generic.build(
+database_url = URI::Generic.build(
   scheme: "postgres",
   userinfo: "#{ENV['DB_USER']}:#{ENV['DB_PASSWORD']}",
   host: ENV["DB_HOST"],
@@ -20,7 +20,7 @@ namespace :db do
 end
 
 task :environment do
-  require_relative "./config/initializers/base.rb"
+  require_relative "./app/api.rb"
 end
 
 task :console => [:environment] do

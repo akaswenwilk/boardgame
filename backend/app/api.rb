@@ -20,4 +20,16 @@ class Api < Hanami::API
 
     [201, response_body]
   end
+
+  post "/users/login" do
+    token = UserService.new.login(
+      email: params[:email],
+      password: params[:password],
+    )
+    response_body = {
+      token: token
+    }.to_json
+
+    [201, response_body]
+  end
 end

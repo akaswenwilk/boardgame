@@ -30,4 +30,12 @@ class UserRepo
 
     token
   end
+
+  def authenticate(email:, password:)
+    encrypted_password = Digest::SHA256.hexdigest(password)
+
+    user = @model.where(email: email, password: encrypted_password).first
+    raise ModelNotFoundError.new("No user found with this email and password") unless user
+    user[:id]
+  end
 end

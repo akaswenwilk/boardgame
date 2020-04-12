@@ -2,6 +2,7 @@ RSpec.describe UserRepo do
   let!(:users) { DB[:users] }
   let(:password) { '12345678' }
   let(:password_confirmation) { password }
+  let(:encrypted_password) { Digest::SHA256.hexdigest(password) }
   let(:email) { 'someemail@example.com' }
 
   describe "#create" do
@@ -78,7 +79,7 @@ RSpec.describe UserRepo do
     let(:id) { 1 }
 
     before do
-      users.insert(email: email, password: password, id: id)
+      users.insert(email: email, password: encrypted_password, id: id)
       allow(SecureRandom).to receive(:base64).and_return(token)
     end
 
@@ -97,6 +98,27 @@ RSpec.describe UserRepo do
 
       it "raises an error when a user isn't found" do
         expect{subject}.to raise_error(ModelNotFoundError)
+      end
+    end
+  end
+
+  describe "#authenticate" do
+    subject { described_class.new.authenticate(email: email, password: password) }
+    let(:id) { 1 }
+
+    before do
+      users.insert(email: email, password: encrypted_password, id: id)
+    end
+
+    it "returns the user id" do
+      expect(subject).to eq(id)
+    end
+
+    context "when there's incorrect information" do
+      subject { described_class.new.authenticate(email: 'somewrongemail@example.com', password: password) }
+
+      it "raises model not found error" do
+        expect{subject}.to raise_error ModelNotFoundError
       end
     end
   end
