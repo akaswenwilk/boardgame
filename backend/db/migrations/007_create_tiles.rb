@@ -3,7 +3,7 @@ Sequel.migration do
     create_table(:tiles) do
       primary_key :id
       foreign_key :game_id, :games
-      String :pattern
+      String :color
     end
   end
 end

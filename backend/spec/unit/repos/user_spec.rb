@@ -4,6 +4,8 @@ RSpec.describe UserRepo do
   let(:password_confirmation) { password }
   let(:encrypted_password) { Digest::SHA256.hexdigest(password) }
   let(:email) { 'someemail@example.com' }
+  let(:id) { 1 }
+  let(:token) { 'token' }
 
   describe "#create" do
     subject { described_class.new.create(**user_params) }
@@ -104,7 +106,6 @@ RSpec.describe UserRepo do
 
   describe "#authenticate" do
     subject { described_class.new.authenticate(email: email, password: password) }
-    let(:id) { 1 }
 
     before do
       users.insert(email: email, password: encrypted_password, id: id)
@@ -119,6 +120,26 @@ RSpec.describe UserRepo do
 
       it "raises model not found error" do
         expect{subject}.to raise_error ModelNotFoundError
+      end
+    end
+  end
+
+  describe "#find_by_token" do
+    subject { described_class.new.find_by_token(token) }
+
+    before do
+      users.insert(email: email, password: encrypted_password, id: id, token: token)
+    end
+
+    it "returns user" do
+      expect(subject).to eq(users.first)
+    end
+
+    context "when token is bad" do
+      subject { described_class.new.find_by_token('bad-token') }
+
+      it "raises model not found error" do
+        expect{subject}.to raise_error(ModelNotFoundError)
       end
     end
   end

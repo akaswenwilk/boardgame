@@ -32,4 +32,10 @@ class Api < Hanami::API
 
     [201, response_body]
   end
+
+  post "/games" do
+    AuthenticationService.new.authenticate(token: params[:token], admin_only: true)
+
+    [200, {}, ""]
+  end
 end

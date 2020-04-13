@@ -38,4 +38,11 @@ class UserRepo
     raise ModelNotFoundError.new("No user found with this email and password") unless user
     user[:id]
   end
+
+  def find_by_token(token)
+    user = @model.where(token: token).first
+    raise ModelNotFoundError.new("No user found with this token") unless user
+
+    user
+  end
 end
