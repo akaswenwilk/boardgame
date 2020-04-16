@@ -4,12 +4,18 @@ RSpec.describe GameService do
   let(:game_id) { 1 }
   let(:tile_repo_class) { TileRepo }
   let(:tile_repo_double) { instance_double(tile_repo_class) }
+  let(:tile_holder_repo_class) { TileHolderRepo }
+  let(:tile_holder_repo_double) { instance_double(tile_holder_repo_class) }
 
   before do
     allow(game_repo_class).to receive(:new).and_return(game_repo_double)
     allow(game_repo_double).to receive(:create).and_return(game_id)
     allow(tile_repo_class).to receive(:new).and_return(tile_repo_double)
     allow(tile_repo_double).to receive(:populate_game)
+    allow(tile_holder_repo_class).to receive(:new).and_return(tile_holder_repo_double)
+    allow(tile_repo_double).to receive(:get_first_tile)
+    allow(tile_holder_repo_double).to receive(:create_center_holder)
+    allow(tile_holder_repo_double).to receive(:add_tiles)
   end
 
   describe "#create" do

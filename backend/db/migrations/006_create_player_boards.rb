@@ -4,9 +4,9 @@ Sequel.migration do
       primary_key :id
       foreign_key :player_id, :players
       foreign_key :game_id, :games
-      column :playing_spaces, :jsonb
-      column :ending_spaces, :jsonb
-      column :negative_spaces, :jsonb
+      String :playing_spaces
+      String :ending_spaces
+      String :negative_spaces
       Integer :points, default: 0
     end
   end

@@ -1,5 +1,7 @@
 require 'sequel'
 
+Sequel.extension(:pg_json_ops)
+
 database_url = URI::Generic.build(
   scheme: "postgres",
   userinfo: "#{ENV['DB_USER']}:#{ENV['DB_PASSWORD']}",

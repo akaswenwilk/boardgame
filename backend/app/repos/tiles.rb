@@ -25,4 +25,8 @@ class TileRepo
 
     @model.insert(game_id: game_id, color: FIRST)
   end
+
+  def get_first_tile(game_id)
+    @model.where(game_id: game_id, color: FIRST).first
+  end
 end

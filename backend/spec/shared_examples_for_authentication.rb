@@ -1,12 +1,4 @@
 RSpec.shared_examples "admin only endpoint" do
-  let(:email) { 'some-email@example.com' }
-  let(:password) { '12345678' }
-  let(:admin) { true }
-
-  before do
-    DB[:users].insert(email: email, password: password, admin: admin, token: token)
-  end
-
   it "doesn't raise an error" do
     subject
 

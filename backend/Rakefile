@@ -15,7 +15,13 @@ namespace :db do
     version = args[:version].to_i if args[:version]
     Sequel.connect(database_url) do |db|
       Sequel::Migrator.run(db, "db/migrations", target: version)
+      version = if db.tables.include?(:schema_info)
+        db[:schema_info].first[:version]
+      end || 0
+
+      puts "Schema Version: #{version}"
     end
+
   end
 end
 
