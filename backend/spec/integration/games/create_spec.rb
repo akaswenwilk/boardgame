@@ -45,7 +45,7 @@ RSpec.describe "POST /games" do
   it "returns the game id" do
     subject
 
-    expect(JSON(last_response.body)["game_id"]).to eq(DB[:games].first[:id])
+    expect(JSON(last_response.body)["id"]).to eq(DB[:games].first[:id])
     expect(last_response.status).to eq(201)
   end
 end
