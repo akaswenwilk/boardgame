@@ -1,5 +1,6 @@
 require_relative "../app/api.rb"
 require 'database_cleaner'
+require 'factory_bot'
 require 'rack/test'
 require_relative "./shared_examples_for_authentication.rb"
 
@@ -20,8 +21,10 @@ require_relative "./shared_examples_for_authentication.rb"
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   config.include Rack::Test::Methods
+  config.include FactoryBot::Syntax::Methods
 
   config.before(:suite) do
+    FactoryBot.find_definitions
     DatabaseCleaner.clean_with(:truncation)
   end
 

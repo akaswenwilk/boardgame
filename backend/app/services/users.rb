@@ -1,17 +1,21 @@
 class UserService
-  def create(email:, password:, password_confirmation:)
-    new_user_id = user_repo.create(
-      email: email,
-      password: password,
+  def create(params)
+    password_confirmation = params.delete(:password_confirmation)
+    user = User.new(params)
+    user.validate!
+
+    user = user_repo.create(
+      user: user,
       password_confirmation: password_confirmation
     )
 
-    user_repo.generate_token(user_id: new_user_id)
+    user_repo.generate_token(user: user)
   end
 
-  def login(email:, password:)
-    user_id = user_repo.authenticate(email: email, password: password)
-    user_repo.generate_token(user_id: user_id)
+  def login(params)
+    user = User.new(params)
+    user = user_repo.authenticate(user: user)
+    user_repo.generate_token(user: user)
   end
 
   private

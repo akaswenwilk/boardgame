@@ -6,19 +6,20 @@ RSpec.describe UserRepo do
   let(:email) { 'someemail@example.com' }
   let(:id) { 1 }
   let(:token) { 'token' }
+  let(:user) { build(:user, password: password, email: email) }
 
   describe "#create" do
     subject { described_class.new.create(**user_params) }
 
     let(:user_params) do
       {
-        email: email,
-        password: password,
+        user: user,
         password_confirmation: password_confirmation
       }
     end
 
     it "saves a new user" do
+      user.id = nil
       expect{subject}.to change{ users.count }.by(1)
     end
 
@@ -39,30 +40,6 @@ RSpec.describe UserRepo do
       end
     end
 
-    context "when there's an invalid email" do
-      let(:email) { "examplegmail.com" }
-
-      it "raises an error" do
-        expect{subject}.to raise_error(ValidationError)
-      end
-    end
-
-    context "when password is not long enough" do
-      let(:password) { "1234" }
-
-      it "raises an error" do
-        expect{subject}.to raise_error(ValidationError)
-      end
-    end
-
-    context "when password doesn't have at least one number" do
-      let(:password) { "password" }
-
-      it "raises an error" do
-        expect{subject}.to raise_error(ValidationError)
-      end
-    end
-
     context "when email is already taken" do
       before do
         users.insert(email: email, password: password)
@@ -75,13 +52,11 @@ RSpec.describe UserRepo do
   end
 
   describe "#generate_token" do
-    subject { described_class.new.generate_token(user_id: user_id) }
+    subject { described_class.new.generate_token(user: user) }
     let(:token) { 'some-token' }
-    let(:user_id) { 1 }
-    let(:id) { 1 }
 
     before do
-      users.insert(email: email, password: encrypted_password, id: id)
+      users.insert(**user.attributes)
       allow(SecureRandom).to receive(:base64).and_return(token)
     end
 
@@ -96,7 +71,9 @@ RSpec.describe UserRepo do
     end
 
     context "when user doesn't exist" do
-      let(:user_id) { 2 }
+      before do
+        user.id = 2
+      end
 
       it "raises an error when a user isn't found" do
         expect{subject}.to raise_error(ModelNotFoundError)
@@ -105,18 +82,18 @@ RSpec.describe UserRepo do
   end
 
   describe "#authenticate" do
-    subject { described_class.new.authenticate(email: email, password: password) }
+    subject { described_class.new.authenticate(user: user) }
 
     before do
       users.insert(email: email, password: encrypted_password, id: id)
     end
 
-    it "returns the user id" do
-      expect(subject).to eq(id)
+    it "returns the user with id" do
+      expect(subject.id).to eq(id)
     end
 
     context "when there's incorrect information" do
-      subject { described_class.new.authenticate(email: 'somewrongemail@example.com', password: password) }
+      subject { described_class.new.authenticate(user: User.new(email: 'some-wrong-email@example.com', password: password)) }
 
       it "raises model not found error" do
         expect{subject}.to raise_error ModelNotFoundError
@@ -132,7 +109,7 @@ RSpec.describe UserRepo do
     end
 
     it "returns user" do
-      expect(subject).to eq(users.first)
+      expect(subject.attributes).to eq(User.new(users.first).attributes)
     end
 
     context "when token is bad" do
