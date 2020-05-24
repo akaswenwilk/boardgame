@@ -33,16 +33,7 @@ RSpec.describe "POST /games" do
     expect { subject }.to change{ DB[:tiles].count }.by(101)
   end
 
-  it "creates the center holder" do
-    expect { subject }.to change{ DB[:tile_holders].count }.by(1)
-  end
-
-  it "adds the first tile to the holder" do
-    subject
-    expect(JSON(DB[:tile_holders].first[:current_tiles]).length).to eq(1)
-  end
-
-  it "returns the game id" do
+  it "returns the game" do
     subject
 
     expect(JSON(last_response.body)["id"]).to eq(DB[:games].first[:id])

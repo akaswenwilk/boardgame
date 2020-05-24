@@ -1,4 +1,4 @@
-RSpec.fdescribe GameService do
+RSpec.describe GameService do
   let(:games) { DB[:games] }
 
   describe "#create" do

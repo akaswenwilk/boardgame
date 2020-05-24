@@ -25,8 +25,4 @@ class TileRepo
     first_tile.id = @model.insert(**first_tile.attributes)
     game.center_tile_holder.tiles << first_tile
   end
-
-  def get_first_tile(game_id)
-    tile = Tile.new(@model.where(game_id: game_id, color: Tile::FIRST).first)
-  end
 end

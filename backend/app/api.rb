@@ -36,13 +36,9 @@ class Api < Hanami::API
   post "/games" do
     AuthenticationService.new.authenticate(token: params[:token], admin_only: true)
 
-    game_id = GameService.new.create
+    game = GameService.new.create
 
-    response_body = {
-      id: game_id
-    }.to_json
-
-    [201, response_body]
+    [201, game.attributes.to_json]
   end
 
   post "/games/:game_id/players" do
