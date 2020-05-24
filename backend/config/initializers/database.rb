@@ -12,3 +12,4 @@ database_url = URI::Generic.build(
 
 
 DB = Sequel.connect(database_url)
+DB.extension(:pg_json)

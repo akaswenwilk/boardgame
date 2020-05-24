@@ -1,9 +1,9 @@
 RSpec.describe TileRepo do
   let(:tiles) { DB[:tiles] }
-  let(:game_id) { 1 }
+  let(:game) { build(:game) }
 
   before do
-    DB[:games].insert(id: game_id)
+    DB[:games].insert(**game.attributes)
   end
 
   describe "#populate_game" do
@@ -21,12 +21,25 @@ RSpec.describe TileRepo do
     it "creates 20 of each tile" do
       subject
       colors = tiles.distinct(:color).order(:color).map{ |tile| tile[:color] }
-      expect(colors.sort).to eq([*TileRepo::COLORS, TileRepo::FIRST].sort)
+      expect(colors.sort).to eq([*Tile::COLORS, Tile::FIRST].sort)
     end
 
     it "only creates one first player tile" do
       subject
-      expect(tiles.where(color: TileRepo::FIRST).count).to eq(1)
+      expect(tiles.where(color: Tile::FIRST).count).to eq(1)
+    end
+  end
+
+  describe "#get_first_tile" do
+    before do
+      described_class.new.populate_game(game_id)
+    end
+
+    subject { described_class.new.get_first_tile(game_id) }
+
+    it "returns the first player tile" do
+      expect(subject).to be_an_instance_of(Tile)
+      expect(subject.color).to eq(Tile::FIRST)
     end
   end
 end

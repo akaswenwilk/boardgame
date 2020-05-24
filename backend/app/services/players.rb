@@ -1,6 +1,6 @@
 class PlayerService
-  def create(name, game_id)
-    player_repo.create(name, game_id)
+  def create(args)
+    player_repo.create(*args)
   end
 
   private

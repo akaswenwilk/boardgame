@@ -1,12 +1,9 @@
 class GameService
   def create
-    game_id = game_repo.create
-    tile_repo.populate_game(game_id)
-    center_holder_id = tile_holder_repo.create_center_holder(game_id)
-    first_tile = tile_repo.get_first_tile(game_id)
-    tile_holder_repo.add_tiles(center_holder_id, [first_tile])
-
-    game_id
+    game = game_repo.create
+    tile_repo.populate_game(game)
+    game_repo.update(game)
+    game
   end
 
   private

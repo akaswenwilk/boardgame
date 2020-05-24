@@ -7,16 +7,16 @@ RSpec.describe GameRepo do
       expect{subject}.to change{games.count}.by(1)
     end
 
-    it "returns the new game id" do
-      expect(subject).to eq(games.first[:id])
-    end
-
-    it "sets default values for game" do
-      subject
-
-      expect(games.first[:started]).to eq(false)
-      expect(games.first[:winner_id]).to eq(nil)
-      expect(games.first[:current_player_id]).to eq(nil)
+    it "returns the game with default values" do
+      expect(subject).to be_an_instance_of(Game)
+      expect(subject.id).not_to be_nil
+      expect(subject.started).to eq(false)
+      expect(subject.winner_id).to eq(nil)
+      expect(subject.current_player_id).to eq(nil)
+      expect(subject.tiles_in_bag).to eq([])
+      expect(subject.center_tile_holder).to be_an_instance_of(TileHolder)
+      expect(subject.center_tile_holder.tiles).to eq([])
+      expect(subject.outside_tile_holders).to eq([])
     end
   end
 end

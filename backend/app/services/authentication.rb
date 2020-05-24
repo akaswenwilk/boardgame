@@ -6,9 +6,9 @@ class AuthenticationService
       raise AuthenticationError.new("Please login first")
     end
 
-    raise AuthenticationError.new("You must be an admin to do that") if admin_only && !user[:admin]
+    raise AuthenticationError.new("You must be an admin to do that") if admin_only && !user.is_admin?
 
-    true
+    user
   end
 
   private

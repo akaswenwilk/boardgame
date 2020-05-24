@@ -1,5 +1,5 @@
 class User
-  attr_accessor :email, :password, :id
+  attr_accessor :email, :password, :id, :admin, :token
 
   EMAIL_REGEX = /@/
   PASSWORD_REGEX = /[0-9]/
@@ -9,10 +9,16 @@ class User
     @email = params&.fetch(:email, nil)
     @password = params&.fetch(:password, nil)
     @id = params&.fetch(:id, nil)
+    @admin = params&.fetch(:admin, false)
+    @token = params&.fetch(:token, nil)
   end
 
   def saved?
     id != nil
+  end
+
+  def is_admin?
+    admin
   end
 
   def match_password?(test_password)
