@@ -1,5 +1,13 @@
 class Game
-  attr_accessor :id, :started, :winner_id, :current_player_id, :tiles_in_bag, :center_tile_holder, :outside_tile_holders
+  attr_accessor(
+    :id,
+    :started,
+    :winner_id,
+    :current_player_id,
+    :tiles_in_bag,
+    :center_tile_holder,
+    :outside_tile_holders
+  )
 
   def initialize(params = {})
     @id = params.fetch(:id, nil)

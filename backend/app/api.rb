@@ -44,7 +44,12 @@ class Api < Hanami::API
   post "/games/:game_id/players" do
     user = AuthenticationService.new.authenticate(token: params[:token])
 
-    args = [params[:name], params[:game_id], user]
+    args = {
+      name: params[:name],
+      game_id: params[:game_id],
+      user: user
+    }
+
     player_id = PlayerService.new.create(args)
 
     response_body = {

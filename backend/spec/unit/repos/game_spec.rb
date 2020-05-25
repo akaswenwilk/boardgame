@@ -19,4 +19,19 @@ RSpec.describe GameRepo do
       expect(subject.outside_tile_holders).to eq([])
     end
   end
+
+  describe "#find" do
+    subject { described_class.new.find(game_id) }
+
+    let(:game_id) { 1 }
+
+    before do
+      games.insert(id: game_id)
+    end
+
+    it "returns a game instance with proper id" do
+      expect(subject).to be_an_instance_of(Game)
+      expect(subject.id).to eq(game_id)
+    end
+  end
 end

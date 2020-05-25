@@ -3,6 +3,13 @@ class GameRepo
     @model = DB[:games]
   end
 
+  def find(game_id)
+    data = @model.first(id: game_id)
+    game = Game.new(data)
+
+    game
+  end
+
   def create
     id = @model.insert
     game = Game.new(@model.where(id: id).first)
