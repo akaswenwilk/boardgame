@@ -32,4 +32,19 @@ class Game
       outside_tile_holders: outside_tile_holders.map(&:attributes).to_json
     }.compact
   end
+
+  def push_outside_tile_holders(player_count)
+    current_tile_holders = self.outside_tile_holders.count
+    target_tile_holders = case player_count
+                            when 2 then 5
+                            when 3 then 7
+                            when 4 then 9
+                            else 0
+                          end
+    until self.outside_tile_holders.count >= target_tile_holders
+      self.outside_tile_holders.push(
+        TileHolder.new
+      )
+    end
+  end
 end
