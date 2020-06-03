@@ -1,5 +1,5 @@
 class Player
-  attr_accessor :id, :game_id, :name, :user_id
+  attr_accessor :id, :game_id, :name, :user_id, :player_board
 
   def initialize(args = {})
     @id = args.fetch(:id, nil)

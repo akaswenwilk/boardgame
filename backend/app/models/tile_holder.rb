@@ -6,6 +6,6 @@ class TileHolder
   end
 
   def attributes
-    tiles.map(&:attributes)
+    { tiles: tiles.map(&:attributes) }
   end
 end

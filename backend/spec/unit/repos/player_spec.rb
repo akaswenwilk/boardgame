@@ -1,4 +1,4 @@
-RSpec.fdescribe PlayerRepo do
+RSpec.describe PlayerRepo do
   let(:players) { DB[:players] }
   let(:game) { build(:game) }
   let(:user) { build(:user) }
