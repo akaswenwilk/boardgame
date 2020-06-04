@@ -5,7 +5,8 @@ class User
   PASSWORD_REGEX = /[0-9]/
   PASSWORD_LENGTH = 8
 
-  def initialize(params)
+  def initialize(params = {})
+    params = params&.with_indifferent_access
     @email = params&.fetch(:email, nil)
     @password = params&.fetch(:password, nil)
     @id = params&.fetch(:id, nil)
@@ -36,12 +37,12 @@ class User
   def attributes(digested_password = false)
     self.password = Digest::SHA256.hexdigest(self.password) if digested_password
 
-    attributes = {
+    {
+      id: id,
       email: email,
-      password: password
-    }
-    attributes.merge!({id: id}) if id
-
-    attributes
+      password: password,
+      token: token,
+      admin: admin
+    }.compact
   end
 end

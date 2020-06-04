@@ -54,14 +54,14 @@ RSpec.describe UserRepo do
   describe "#generate_token" do
     subject { described_class.new.generate_token(user: user) }
     let(:token) { 'some-token' }
+    let(:user) { create(:user, token: nil) }
 
     before do
-      users.insert(**user.attributes)
       allow(SecureRandom).to receive(:base64).and_return(token)
     end
 
     it "generates a token for the user" do
-      expect(users.first[:token]).to be_nil
+      expect(user.token).to be_nil
       subject
       expect(users.first[:token]).to eq(token)
     end

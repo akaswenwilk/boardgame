@@ -17,6 +17,7 @@ class Tile
   attr_accessor :id, :color, :game_id
 
   def initialize(args = {})
+    args = args&.with_indifferent_access
     @id = args.fetch(:id, nil)
     @game_id = args.fetch(:game_id, nil)
     @color = args.fetch(:color, nil)

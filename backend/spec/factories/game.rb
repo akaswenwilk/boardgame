@@ -1,6 +1,14 @@
 FactoryBot.define do
   factory :game do
-    skip_create
+    to_create do |game|
+      game.id = DB[:games].insert(**game.attributes)
+    end
+
+    transient do
+      user { nil }
+      players { 0 }
+      populated { false }
+    end
 
     sequence :id do |n|
       n
@@ -24,6 +32,19 @@ FactoryBot.define do
         outside_tile_holders: outside_tile_holders,
       }
       new(params)
+    end
+
+    after(:create) do |game, evaluator|
+      if evaluator.populated
+        TileRepo.new.populate_game(game)
+        DB[:games].where(id: game.id).update(**game.attributes)
+      end
+
+      if evaluator.user && evaluator.players > 0
+        create_list(:player, evaluator.players, user_id: evaluator.user.id, game_id: game.id)
+        game.push_outside_tile_holders(evaluator.players)
+        DB[:games].where(id: game.id).update(**game.attributes)
+      end
     end
   end
 end

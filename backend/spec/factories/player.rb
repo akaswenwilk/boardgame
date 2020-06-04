@@ -1,6 +1,8 @@
 FactoryBot.define do
   factory :player do
-    skip_create
+    to_create do |player|
+      player.id = DB[:players].insert(**player.attributes)
+    end
 
     sequence :id do |n|
       n

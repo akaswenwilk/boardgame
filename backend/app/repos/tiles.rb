@@ -17,6 +17,8 @@ class TileRepo
       end
     end
 
+    game.tiles_in_bag.shuffle!
+
     first_tile = Tile.new({
       game_id: game.id,
       color: Tile::FIRST

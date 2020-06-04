@@ -2,6 +2,7 @@ class PlayerBoard
   attr_accessor :id, :game_id, :player_id, :playing_spaces, :negative_spaces, :ending_spaces, :points
 
   def initialize(args = {})
+    args = args&.with_indifferent_access
     @game_id = args.fetch(:game_id, nil)
     @player_id = args.fetch(:player_id, nil)
     @id = args.fetch(:id, nil)

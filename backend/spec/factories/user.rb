@@ -1,6 +1,8 @@
 FactoryBot.define do
   factory :user do
-    skip_create
+    to_create do |user|
+      user.id = DB[:users].insert(**user.attributes)
+    end
 
     sequence :id do |n|
       n
@@ -8,12 +10,14 @@ FactoryBot.define do
 
     email { 'some-email@example.com' }
     password { '12345678' }
+    token { 'some-token' }
 
     initialize_with do
       params = {
         id: id,
         email: email,
-        password: password
+        password: password,
+        token: token
       }
       new(params)
     end
