@@ -11,4 +11,9 @@ class PlayerBoardRepo
     player_board.id = @model.insert(**player_board.attributes)
     player.player_board = player_board
   end
+
+  def find_by_player(player_id)
+    data = @model.where(player_id: player_id).first
+    PlayerBoard.new(data)
+  end
 end

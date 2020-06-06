@@ -50,7 +50,7 @@ RSpec.describe "POST /users" do
     it "returns an error response" do
       subject
 
-      expect(JSON(last_response.body)).to eq(response)
+      expect(JSON(last_response.body)).to include(response)
       expect(last_response.status).to eq(400)
     end
   end

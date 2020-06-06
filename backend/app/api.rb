@@ -66,4 +66,26 @@ class Api < Hanami::API
 
     [200, game.attributes.to_json]
   end
+
+  get "games/:game_id/players/:player_id/moves" do
+    game_id = params[:game_id]
+    player_id = params[:player_id]
+    tile_holder = params[:tile_holder]
+    tile_holder = tile_holder.to_i unless tile_holder == 'center'
+    color = params[:color]
+
+    args = {
+      game_id: game_id,
+      player_id: player_id,
+      tile_holder: tile_holder,
+      color: color
+    }
+
+    raise InvalidParamsError.new("require both a tile_holder and a color in params") unless tile_holder && color
+    raise InvalidParamsError.new("Color must be either #{Tile::COLORS.join(', ')}") unless Tile::COLORS.include?(color)
+
+    possible_moves = GameService.new.possible_moves(**args)
+
+    [200, possible_moves.to_json]
+  end
 end

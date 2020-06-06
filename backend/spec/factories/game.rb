@@ -8,13 +8,13 @@ FactoryBot.define do
       user { nil }
       players { 0 }
       populated { false }
+      started { false }
     end
 
     sequence :id do |n|
       n
     end
 
-    started { false }
     winner_id { nil }
     current_player_id { nil }
     tiles_in_bag { nil }
@@ -41,8 +41,16 @@ FactoryBot.define do
       end
 
       if evaluator.user && evaluator.players > 0
-        create_list(:player, evaluator.players, user_id: evaluator.user.id, game_id: game.id)
+        game.players = create_list(:player, evaluator.players, user_id: evaluator.user.id, game_id: game.id)
         game.push_outside_tile_holders(evaluator.players)
+        DB[:games].where(id: game.id).update(**game.attributes)
+      end
+
+      if evaluator.started
+        game.started = true
+        game.set_player_order(game.players)
+        game.increment_current_player
+        game.distribute_tiles_to_outside_holders
         DB[:games].where(id: game.id).update(**game.attributes)
       end
     end

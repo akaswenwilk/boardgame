@@ -10,10 +10,15 @@ class ErrorHandler
       response_body = {
         "error_type" => e.class.name,
         "error_message" => e.message,
-        "request_params" => env["router.parsed_body"]
+        "request_params" => env["router.parsed_body"],
+        "backtrace" => e.backtrace
       }.to_json
 
-      return [e.code, {}, response_body]
+      begin
+        return [e.code, {}, response_body]
+      rescue
+        return [500, {}, response_body]
+      end
     end
   end
 end

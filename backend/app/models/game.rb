@@ -8,7 +8,8 @@ class Game
     :center_tile_holder,
     :outside_tile_holders,
     :player_order,
-    :used_tiles
+    :used_tiles,
+    :players
   )
 
   def initialize(params = {})

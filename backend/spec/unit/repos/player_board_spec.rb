@@ -11,33 +11,33 @@ RSpec.describe PlayerBoardRepo do
     let(:player) { build(:player) }
     let(:game) { build(:game) }
     let(:starting_playing_spaces) do
-      {
-        row_one: {
+      [
+        {
           max_length: 1,
           tiles: []
         },
-        row_two: {
+        {
           max_length: 2,
           tiles: []
         },
-        row_three: {
+        {
           max_length: 3,
           tiles: []
         },
-        row_four: {
+        {
           max_length: 4,
           tiles: []
         },
-        row_five: {
+        {
           max_length: 5,
           tiles: []
         },
-      }
+      ]
     end
 
     let(:starting_ending_spaces) do
-      {
-        row_one: {
+      [
+        {
           tiles: [
             {id: nil, color: Tile::BLUE},
             {id: nil, color: Tile::YELLOW},
@@ -46,7 +46,7 @@ RSpec.describe PlayerBoardRepo do
             {id: nil, color: Tile::LIGHT_BLUE}
           ]
         },
-        row_two: {
+        {
           tiles: [
             {id: nil, color: Tile::LIGHT_BLUE},
             {id: nil, color: Tile::BLUE},
@@ -55,7 +55,7 @@ RSpec.describe PlayerBoardRepo do
             {id: nil, color: Tile::BLACK}
           ]
         },
-        row_three: {
+        {
           tiles: [
             {id: nil, color: Tile::BLACK},
             {id: nil, color: Tile::LIGHT_BLUE},
@@ -64,7 +64,7 @@ RSpec.describe PlayerBoardRepo do
             {id: nil, color: Tile::RED}
           ]
         },
-        row_four: {
+        {
           tiles: [
             {id: nil, color: Tile::RED},
             {id: nil, color: Tile::BLACK},
@@ -73,7 +73,7 @@ RSpec.describe PlayerBoardRepo do
             {id: nil, color: Tile::YELLOW}
           ]
         },
-        row_five: {
+        {
           tiles: [
             {id: nil, color: Tile::YELLOW},
             {id: nil, color: Tile::RED},
@@ -82,7 +82,7 @@ RSpec.describe PlayerBoardRepo do
             {id: nil, color: Tile::BLUE}
           ]
         },
-      }
+      ]
     end
 
     before do

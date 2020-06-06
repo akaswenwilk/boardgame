@@ -42,6 +42,7 @@ RSpec.describe "POST /games" do
 
   context "when it is already started" do
   let(:game) { create(:game, user: user, players: player_number, started: true, populated: true) }
+
     it "changes nothing" do
       subject
 

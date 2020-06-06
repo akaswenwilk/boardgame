@@ -27,3 +27,10 @@ class AuthenticationError < ApiException
     @code = 403
   end
 end
+
+class InvalidParamsError < ApiException
+  def initialize(message)
+    @message = message
+    @code = 400
+  end
+end
