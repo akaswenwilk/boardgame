@@ -115,4 +115,13 @@ class Api < Hanami::API
 
     [200, full_game.to_json]
   end
+
+  delete "games/:game_id" do
+    AuthenticationService.new.authenticate(token: params[:token], admin_only: true)
+
+    game_id = params[:game_id]
+    GameService.new.delete(game_id)
+
+    [200, ""]
+  end
 end

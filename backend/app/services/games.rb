@@ -103,6 +103,15 @@ class GameService
     game.full_attributes
   end
 
+  def delete(game_id)
+    game = game_repo.find(game_id)
+    game_repo.make_current_player_nil(game)
+    tile_repo.delete_all(game_id)
+    player_board_repo.delete_all(game_id)
+    player_repo.delete_all(game_id)
+    game_repo.delete(game_id)
+  end
+
   private
 
   def valid_move_choice!(game:, player_id:, tile_holder:, color:)

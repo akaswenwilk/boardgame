@@ -20,4 +20,12 @@ class GameRepo
 
     @model.where(id: game.id).update(**game.attributes)
   end
+
+  def make_current_player_nil(game)
+    @model.where(id: game.id).update(current_player_id: nil)
+  end
+
+  def delete(game_id)
+    @model.where(id: game_id).delete
+  end
 end

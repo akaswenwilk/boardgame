@@ -17,4 +17,8 @@ class PlayerRepo
     players = @player.where(game_id: game.id).all
     players.map! { |data| Player.new(data) }
   end
+
+  def delete_all(game_id)
+    @player.where(game_id: game_id).delete
+  end
 end

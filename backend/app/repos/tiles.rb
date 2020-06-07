@@ -27,4 +27,8 @@ class TileRepo
     first_tile.id = @model.insert(**first_tile.attributes)
     game.center_tile_holder.tiles << first_tile
   end
+
+  def delete_all(game_id)
+    @model.where(game_id: game_id).delete
+  end
 end

@@ -22,4 +22,8 @@ class PlayerBoardRepo
 
     @model.where(id: player_board.id).update(**player_board.attributes)
   end
+
+  def delete_all(game_id)
+    @model.where(game_id: game_id).delete
+  end
 end
