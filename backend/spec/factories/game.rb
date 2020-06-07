@@ -15,7 +15,7 @@ FactoryBot.define do
       n
     end
 
-    winner_id { nil }
+    winner_name { nil }
     current_player_id { nil }
     tiles_in_bag { nil }
     center_tile_holder { nil }
@@ -25,7 +25,7 @@ FactoryBot.define do
       params = {
         id: id,
         started: started,
-        winner_id: winner_id,
+        winner_name: winner_name,
         current_player_id: current_player_id,
         tiles_in_bag: tiles_in_bag,
         center_tile_holder: center_tile_holder,

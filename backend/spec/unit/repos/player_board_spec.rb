@@ -32,7 +32,7 @@ RSpec.describe PlayerBoardRepo do
           max_length: 5,
           tiles: []
         },
-      ]
+      ].map(&:stringify_keys)
     end
 
     let(:starting_ending_spaces) do

@@ -19,7 +19,7 @@ RSpec.describe "POST /games" do
     res = JSON(last_response.body).with_indifferent_access
     expect(res[:id]).to eq game.id
     expect(res[:started]).to eq true
-    expect(res[:winner_id]).to eq nil
+    expect(res[:winner_name]).to eq nil
     expect(res[:current_player_id]).not_to be nil
 
     player_order = JSON(res[:player_order])
@@ -50,7 +50,7 @@ RSpec.describe "POST /games" do
       res = JSON(last_response.body).with_indifferent_access
       expect(res[:id]).to eq game.id
       expect(res[:started]).to eq true
-      expect(res[:winner_id]).to eq nil
+      expect(res[:winner_name]).to eq nil
       expect(res[:current_player_id]).not_to be nil
 
       player_order = JSON(res[:player_order])

@@ -16,4 +16,10 @@ class PlayerBoardRepo
     data = @model.where(player_id: player_id).first
     PlayerBoard.new(data)
   end
+
+  def update(player_board)
+    raise ModelNotFoundError.new("game not yet saved, cannot be updated") unless player_board.id
+
+    @model.where(id: player_board.id).update(**player_board.attributes)
+  end
 end

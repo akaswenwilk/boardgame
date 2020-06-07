@@ -43,6 +43,66 @@ class GameService
     { possible_rows: possible_rows }
   end
 
+  def move(game_id:, player_id:, tile_holder:, color:, row:)
+    game = game_repo.find(game_id)
+
+    args = {
+      game: game,
+      player_id: player_id,
+      tile_holder: tile_holder,
+      color: color
+    }
+
+    valid_move_choice!(**args)
+    player_board = player_board_repo.find_by_player(player_id)
+
+    raise ValidationError.new("not a valid move") unless player_board.valid_move?(row, color)
+
+    tiles = game.tiles_from_holder(tile_holder, color)
+    player_board.add_tiles(tiles, row, game)
+
+    player_board_repo.update(player_board)
+
+    game.players = player_repo.all_by_game(game)
+    game.players.each { |p| p.player_board = player_board_repo.find_by_player(p.id) }
+
+    game_over = false
+    if game.end_of_round?
+      first_player = game.players.find { |p| p.player_board.negative_spaces.any? {|t| t.color == Tile::FIRST } }
+      game.current_player_id = first_player.id
+      game.players.each do |player|
+        player.player_board.score_points(game)
+        game_over ||= true if player.player_board.has_full_row?
+      end
+      game.distribute_tiles_to_outside_holders
+    else
+      game.increment_current_player
+    end
+
+    if game_over
+      game.players.each do |player|
+        player.player_board.score_special_points
+      end
+      players = game.players.map { |p| [p.player_board.points, p.id] }
+      winner = players.max { |a, b| a[0] <=> b[0] }
+      winner_name = winner[1]
+      game.winner_name = winner_name.to_s
+      if players.select { |p| p[0] == winner[0] }.count > 1
+        game.winner_name = "tie"
+      end
+      game.started = false
+    end
+
+
+
+
+
+    game_repo.update(game)
+    player_board_repo.update(player_board)
+
+    game.full_attributes
+  end
+
   private
 
   def valid_move_choice!(game:, player_id:, tile_holder:, color:)

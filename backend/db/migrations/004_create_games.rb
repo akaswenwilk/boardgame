@@ -3,7 +3,7 @@ Sequel.migration do
     create_table(:games) do
       primary_key :id
       TrueClass :started, default: false
-      foreign_key :winner_id, :players
+      String :winner_name
       foreign_key :current_player_id, :players
     end
   end

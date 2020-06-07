@@ -9,7 +9,7 @@ RSpec.describe GameService do
       expect(subject).to be_an_instance_of(Game)
       expect(subject.id).not_to be_nil
       expect(subject.started).to eq(false)
-      expect(subject.winner_id).to eq(nil)
+      expect(subject.winner_name).to eq(nil)
       expect(subject.current_player_id).to eq(nil)
       expect(subject.center_tile_holder).to be_an_instance_of(TileHolder)
     end

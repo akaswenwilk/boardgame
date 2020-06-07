@@ -11,7 +11,7 @@ RSpec.describe GameRepo do
       expect(subject).to be_an_instance_of(Game)
       expect(subject.id).not_to be_nil
       expect(subject.started).to eq(false)
-      expect(subject.winner_id).to eq(nil)
+      expect(subject.winner_name).to eq(nil)
       expect(subject.current_player_id).to eq(nil)
       expect(subject.tiles_in_bag).to eq([])
       expect(subject.center_tile_holder).to be_an_instance_of(TileHolder)

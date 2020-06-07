@@ -17,4 +17,11 @@ class Player
       user_id: user_id
     }.compact
   end
+
+  def attributes_with_board
+    r = attributes
+    r.merge!({
+      player_board: player_board.attributes
+    })
+  end
 end

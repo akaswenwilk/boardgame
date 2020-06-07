@@ -1,5 +1,5 @@
 RSpec.describe "POST /games" do
-  subject { get "/games/#{game_id}/players/#{player_id}/moves#{params_string}", { "CONTENT_TYPE" => "application/json" } }
+  subject { get "/games/#{game_id}/players/#{player_id}/possible_moves#{params_string}", { "CONTENT_TYPE" => "application/json" } }
 
   let(:params_string) { "?tile_holder=#{tile_holder}&color=#{color}" }
   let(:user) { create(:user) }
@@ -59,8 +59,9 @@ RSpec.describe "POST /games" do
 
       before do
         single_tile = Tile.new(DB[:tiles].all.last)
-        player_board.playing_spaces[0]["tiles"] = single_tile
+        player_board.playing_spaces[0]["tiles"] = [single_tile]
         five_tiles = DB[:tiles].first(5)
+        five_tiles.map! { |data| Tile.new(data) }
         player_board.playing_spaces[4]["tiles"] = five_tiles
         DB[:player_boards].where(id: player_board.id).update(**player_board.attributes)
       end
@@ -78,6 +79,7 @@ RSpec.describe "POST /games" do
 
       before do
         four_tiles = DB[:tiles].where(color: color).first(4)
+        four_tiles.map! { |data| Tile.new(data) }
         player_board.playing_spaces[4]["tiles"] = four_tiles
         DB[:player_boards].where(id: player_board.id).update(**player_board.attributes)
       end
@@ -95,6 +97,7 @@ RSpec.describe "POST /games" do
 
       before do
         four_tiles = DB[:tiles].where(color: Tile::RED).first(4)
+        four_tiles.map! { |data| Tile.new(data) }
         player_board.playing_spaces[4]["tiles"] = four_tiles
         DB[:player_boards].where(id: player_board.id).update(**player_board.attributes)
       end
@@ -146,7 +149,8 @@ RSpec.describe "POST /games" do
 
       before do
         5.times do |n|
-          tiles = DB[:tiles].first(n + 1)
+          tiles = [DB[:tiles].first(n + 1)].flatten
+          tiles.map! { |data| Tile.new(data) }
           player_board.playing_spaces[n]["tiles"] = tiles
         end
 
