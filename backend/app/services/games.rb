@@ -22,7 +22,7 @@ class GameService
     game
   end
 
-  def possible_moves(game_id:, player_id:, tile_holder:, color:)
+  def possible_moves(game_id:, player_id:, tile_holder:, color:, user:)
     game = game_repo.find(game_id)
 
     args = {
@@ -31,6 +31,9 @@ class GameService
       tile_holder: tile_holder,
       color: color
     }
+    player = player_repo.find(player_id)
+
+    raise ValidationError.new("Player does not belong to user") unless player.user_id == user.id
 
     valid_move_choice!(**args)
     player_board = player_board_repo.find_by_player(player_id)
@@ -43,7 +46,7 @@ class GameService
     { possible_rows: possible_rows }
   end
 
-  def move(game_id:, player_id:, tile_holder:, color:, row:)
+  def move(game_id:, player_id:, tile_holder:, color:, row:, user:)
     game = game_repo.find(game_id)
 
     args = {
@@ -52,6 +55,10 @@ class GameService
       tile_holder: tile_holder,
       color: color
     }
+
+    player = player_repo.find(player_id)
+
+    raise ValidationError.new("Player does not belong to user") unless player.user_id == user.id
 
     valid_move_choice!(**args)
     player_board = player_board_repo.find_by_player(player_id)
@@ -110,6 +117,14 @@ class GameService
     player_board_repo.delete_all(game_id)
     player_repo.delete_all(game_id)
     game_repo.delete(game_id)
+  end
+
+  def get_full_game(game_id)
+    game = game_repo.find(game_id)
+    game.players = player_repo.all_by_game(game)
+    game.players.each { |p| p.player_board = player_board_repo.find_by_player(p.id) }
+
+    game
   end
 
   private

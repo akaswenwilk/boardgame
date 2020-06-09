@@ -8,7 +8,9 @@ FactoryBot.define do
       n
     end
 
-    email { 'some-email@example.com' }
+    sequence :email do |n|
+      "some-email-#{n}@example.com"
+    end
     password { '12345678' }
     token { 'some-token' }
 

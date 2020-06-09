@@ -1,8 +1,16 @@
 RSpec.describe "POST /games" do
-  subject { get "/games/#{game_id}/players/#{player_id}/possible_moves#{params_string}", { "CONTENT_TYPE" => "application/json" } }
+  subject { post "/games/#{game_id}/players/#{player_id}/possible_moves", params.to_json, { "CONTENT_TYPE" => "application/json" } }
 
-  let(:params_string) { "?tile_holder=#{tile_holder}&color=#{color}" }
-  let(:user) { create(:user) }
+  let(:params) do
+    {
+      token: token,
+      tile_holder: tile_holder,
+      color: color
+    }
+  end
+  let(:user) { create(:user, token: token, admin: admin) }
+  let(:admin) { true }
+  let(:token) { 'some-token' }
   let(:game) { create(:game, user: user, players: player_number, populated: true, started: started) }
   let(:player_number) { 2 }
   let(:game_id) { game.id }
@@ -18,6 +26,8 @@ RSpec.describe "POST /games" do
     game.outside_tile_holders.first.tiles = tiles
     DB[:games].where(id: game.id).update(**game.attributes)
   end
+
+  it_behaves_like 'authenticated endpoint'
 
   context "when there are no validation errors" do
     let(:player) { game.players.select { |p| p.id == player_id }.first }
@@ -179,7 +189,7 @@ RSpec.describe "POST /games" do
     end
 
     context "when the params are missing" do
-      let(:params_string) { "" }
+      let(:params) { {token: token} }
 
       it "returns an error" do
         subject
@@ -233,6 +243,23 @@ RSpec.describe "POST /games" do
 
     context "when it's not the current player's turn" do
       let(:player_id) { game.player_order.last }
+
+      it "returns an error" do
+        subject
+
+        expect(last_response.status).to eq 400
+      end
+    end
+
+    context "when player does not belong to user" do
+      let(:other_user) { create(:user, token: 'some-other-token') }
+      let(:params) do
+        {
+          token: other_user.token,
+          tile_holder: tile_holder,
+          color: color
+        }
+      end
 
       it "returns an error" do
         subject

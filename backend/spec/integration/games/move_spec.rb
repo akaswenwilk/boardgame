@@ -335,5 +335,23 @@ RSpec.describe "POST /games" do
         expect(last_response.status).to eq(400)
       end
     end
+
+    context "when player doesn't belong to playyer" do
+      let(:other_user) { create(:user, token: 'some-other-token') }
+      let(:params) do
+        {
+          token: other_user.token,
+          tile_holder: tile_holder,
+          color: color,
+          row: row
+        }
+      end
+
+      it "returns an error" do
+        subject
+
+        expect(last_response.status).to eq 400
+      end
+    end
   end
 end

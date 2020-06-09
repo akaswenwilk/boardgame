@@ -5,7 +5,7 @@ class Api < Hanami::API
   use ErrorHandler
 
   get "/" do
-    "Hello, world"
+    [200, {'Access-Control-Allow-Origin' => 'http://localhost:3001'}, "Hello, world"]
   end
 
   post "/users" do
@@ -34,7 +34,7 @@ class Api < Hanami::API
   end
 
   post "/games" do
-    AuthenticationService.new.authenticate(token: params[:token], admin_only: true)
+    use = AuthenticationService.new.authenticate(token: params[:token], admin_only: true)
 
     game = GameService.new.create
 
@@ -60,14 +60,16 @@ class Api < Hanami::API
   end
 
   post "games/:game_id/start" do
-    AuthenticationService.new.authenticate(token: params[:token], admin_only: true)
+    user = AuthenticationService.new.authenticate(token: params[:token], admin_only: true)
 
     game = GameService.new.start(params[:game_id])
 
     [200, game.attributes.to_json]
   end
 
-  get "games/:game_id/players/:player_id/possible_moves" do
+  post "games/:game_id/players/:player_id/possible_moves" do
+    user = AuthenticationService.new.authenticate(token: params[:token])
+
     game_id = params[:game_id]
     player_id = params[:player_id]
     tile_holder = params[:tile_holder]
@@ -78,7 +80,8 @@ class Api < Hanami::API
       game_id: game_id,
       player_id: player_id,
       tile_holder: tile_holder,
-      color: color
+      color: color,
+      user: user
     }
 
     raise InvalidParamsError.new("require both a tile_holder and a color in params") unless tile_holder && color
@@ -90,7 +93,7 @@ class Api < Hanami::API
   end
 
   post "games/:game_id/players/:player_id/move" do
-    AuthenticationService.new.authenticate(token: params[:token])
+    user = AuthenticationService.new.authenticate(token: params[:token])
 
     game_id = params[:game_id]
     player_id = params[:player_id]
@@ -104,7 +107,8 @@ class Api < Hanami::API
       player_id: player_id,
       tile_holder: tile_holder,
       color: color,
-      row: row
+      row: row,
+      user: user
     }
 
     raise InvalidParamsError.new("require both a tile_holder and a color and a row in params") unless tile_holder && color && row
@@ -117,11 +121,19 @@ class Api < Hanami::API
   end
 
   delete "games/:game_id" do
-    AuthenticationService.new.authenticate(token: params[:token], admin_only: true)
+    user = AuthenticationService.new.authenticate(token: params[:token], admin_only: true)
 
     game_id = params[:game_id]
     GameService.new.delete(game_id)
 
     [200, ""]
+  end
+
+  get "/games/:game_id" do
+    game_id = params[:game_id]
+
+    game = GameService.new.get_full_game(game_id)
+
+    [200, game.full_attributes.to_json]
   end
 end
