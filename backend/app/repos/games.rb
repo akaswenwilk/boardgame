@@ -10,6 +10,11 @@ class GameRepo
     game
   end
 
+  def get_all
+    data = @model.all
+    data.map { |data| Game.new(data) }
+  end
+
   def create
     id = @model.insert
     game = Game.new(@model.where(id: id).first)

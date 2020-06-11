@@ -6,6 +6,10 @@ class GameService
     game
   end
 
+  def get_all_games
+    game_repo.get_all
+  end
+
   def start(game_id)
     game = game_repo.find(game_id)
     unless game.current_player_id

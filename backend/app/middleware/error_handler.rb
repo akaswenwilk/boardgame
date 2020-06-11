@@ -5,7 +5,7 @@ class ErrorHandler
 
   def call(env)
     begin
-      @app.call(env)
+      result = @app.call(env)
     rescue => e
       response_body = {
         "error_type" => e.class.name,
@@ -14,10 +14,16 @@ class ErrorHandler
         "backtrace" => e.backtrace
       }.to_json
 
+      headers = {}
+      headers['Access-Control-Allow-Origin'] = 'http://localhost:3001'
+      headers["Access-Control-Allow-Methods"] = "*"
+      headers["Access-Control-Request-Method"] = '*'
+      headers["Access-Control-Allow-Headers"] = "*"
+
       begin
-        return [e.code, {}, response_body]
+        return [e.code, headers, StringIO.new(response_body)]
       rescue
-        return [500, {}, response_body]
+        return [500, headers, StringIO.new(response_body)]
       end
     end
   end

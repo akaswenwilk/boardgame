@@ -6,6 +6,8 @@ class User
   PASSWORD_LENGTH = 8
 
   def initialize(params = {})
+    Hanami::Logger.new(stream: 'logfile.log').info("the user params #{params.class}: #{params}")
+    Hanami::Logger.new(stream: 'logfile.log').info("the with with_indifferent_access #{ActiveSupport.class} and #{ActiveSupport::HashWithIndifferentAccess.new}")
     params = params&.with_indifferent_access
     @email = params&.fetch(:email, nil)
     @password = params&.fetch(:password, nil)
@@ -41,6 +43,15 @@ class User
       id: id,
       email: email,
       password: password,
+      token: token,
+      admin: admin
+    }.compact
+  end
+
+  def attributes_for_frontend
+    {
+      id: id,
+      email: email,
       token: token,
       admin: admin
     }.compact

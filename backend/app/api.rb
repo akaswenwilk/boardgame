@@ -3,34 +3,29 @@ require_relative "../config/initializers/base.rb"
 class Api < Hanami::API
   use Hanami::Middleware::BodyParser, :json
   use ErrorHandler
+  use CrossOriginHeaders
 
   get "/" do
-    [200, {'Access-Control-Allow-Origin' => 'http://localhost:3001'}, "Hello, world"]
+    [200, "Hello, world"]
   end
 
   post "/users" do
-    token = UserService.new.create(
+    user = UserService.new.create(
       email: params[:email],
       password: params[:password],
       password_confirmation: params[:password_confirmation]
     )
-    response_body = {
-      token: token
-    }.to_json
 
-    [201, response_body]
+    [201, {'some-header' => 'some-value'}, user.attributes_for_frontend.to_json]
   end
 
   post "/users/login" do
-    token = UserService.new.login(
+    user = UserService.new.login(
       email: params[:email],
       password: params[:password],
     )
-    response_body = {
-      token: token
-    }.to_json
 
-    [201, response_body]
+    [201, user.attributes_for_frontend.to_json]
   end
 
   post "/games" do
@@ -39,6 +34,12 @@ class Api < Hanami::API
     game = GameService.new.create
 
     [201, game.attributes.to_json]
+  end
+
+  get "/games" do
+    games = GameService.new.get_all_games
+
+    [200, games.map(&:attributes).to_json]
   end
 
   post "/games/:game_id/players" do

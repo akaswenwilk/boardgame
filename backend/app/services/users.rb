@@ -9,13 +9,17 @@ class UserService
       password_confirmation: password_confirmation
     )
 
-    user_repo.generate_token(user: user)
+    user.token = user_repo.generate_token(user: user)
+
+    user
   end
 
   def login(params)
     user = User.new(params)
     user = user_repo.authenticate(user: user)
-    user_repo.generate_token(user: user)
+    user.token = user_repo.generate_token(user: user)
+
+    user
   end
 
   private
