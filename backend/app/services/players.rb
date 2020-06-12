@@ -4,11 +4,12 @@ class PlayerService
     args[:game] = game
     player = player_repo.create(**args)
     player_board_repo.create(player: player, game: game)
-    game_players = player_repo.all_by_game(game)
-    game.push_outside_tile_holders(game_players.count)
+    game.players = player_repo.all_by_game(game)
+    game.push_outside_tile_holders(game.players.count)
     game_repo.update(game)
+    game.players.each { |p| p.player_board = player_board_repo.find_by_player(p.id) }
 
-    player
+    game
   end
 
   private

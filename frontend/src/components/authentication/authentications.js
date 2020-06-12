@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import MyContext from '../../context.js';
+import axios from '../../axios.js';
 
 class Authentication extends Component {
+  static contextType = MyContext;
+
   state = {
     email: '',
     password: '',
@@ -11,28 +15,23 @@ class Authentication extends Component {
   }
 
   emailChangeHandler = (e) => {
-    this.setState({email: e.target.value});
+    let newValue = e.target.value;
+    this.setState(state => {
+      return {email: newValue}
+    });
   }
 
   passwordChangeHandler = (e) => {
-    let password = e.target.value;
-    this.setState((state) => {
-      let errors = null;
-      if (state.passwordConfirmation !== password && state.mode === 'signup') {
-        errors = 'password must match password confirmation';
-      }
-      return {password: password, errors: errors};
+    let newValue = e.target.value;
+    this.setState(state => {
+      return {password: newValue}
     });
   }
 
   passwordConfirmationChangeHandler = (e) => {
-    let passwordConfirmation = e.target.value;
-    this.setState((state) => {
-      let errors = null;
-      if (state.password !== passwordConfirmation && state.mode === 'signup') {
-        errors = 'password must match password confirmation';
-      }
-      return {passwordConfirmation: passwordConfirmation, errors: errors};
+    let newValue = e.target.value;
+    this.setState(state => {
+      return {passwordConfirmation: newValue}
     });
   }
 
@@ -46,22 +45,61 @@ class Authentication extends Component {
     });
   }
 
-  submitHandler = () => {
-    if (!this.state.errors) {
-      if (this.state.mode === 'signup') {
-        this.props.signupHandler(this.state.email, this.state.password, this.state.passwordConfirmation);
-      } else {
-        this.props.loginHandler(this.state.email, this.state.password, this.state.rememberMe);
-      }
-    }
-  }
-
   handleRememberMe = () => {
     this.setState((state) => {
       let newValue = !state.rememberMe;
       return {rememberMe: newValue};
     });
   }
+
+  signup = (email, password, passwordConfirmation) => {
+    let params = {
+      email: email,
+      password: password,
+      password_confirmation: passwordConfirmation
+    }
+
+    axios.post('/users', params)
+      .then(response => {
+        let user = response.data
+        this.context.addUser(user)
+      })
+      .catch(response => {
+        let errors = response.data.error_message;
+        this.context.addError(errors)
+      });
+  }
+
+  login = (email, password) => {
+    let params = {
+      email: email,
+      password: password
+    }
+
+    axios.post('/users/login', params)
+      .then(response => {
+        let user = response.data;
+        if (this.state.rememberMe) {
+          window.localStorage.setItem('user', JSON.stringify(user));
+        }
+        this.context.addUser(user);
+      })
+      .catch(response => {
+        let errors = response.data.error_message;
+        this.context.addError(errors);
+      });
+  }
+
+  submitHandler = () => {
+    if (!this.context.errors) {
+      if (this.state.mode === 'signup') {
+        this.signup(this.state.email, this.state.password, this.state.passwordConfirmation);
+      } else {
+        this.login(this.state.email, this.state.password);
+      }
+    }
+  }
+
 
   render() {
     let title = <p>Log in</p>
@@ -86,6 +124,7 @@ class Authentication extends Component {
       );
       buttonText = "Already have an account? Log in instead!"
     }
+
     return(
       <div>
         {title}

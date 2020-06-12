@@ -51,13 +51,9 @@ class Api < Hanami::API
       user: user
     }
 
-    player_id = PlayerService.new.create(args)
+    game = PlayerService.new.create(args)
 
-    response_body = {
-      id: player_id
-    }.to_json
-
-    [201, response_body]
+    [201, game.full_attributes.to_json]
   end
 
   post "games/:game_id/start" do

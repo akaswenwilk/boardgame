@@ -1,14 +1,9 @@
 import React from 'react';
-import {
-    Link
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function GameListItem(props) {
   let joinGame = (
     <Link to={`/games/${props.game.id}`}
-      onClick={() => {
-        props.selectGameHandler(props.game);
-      }}
     >join</Link>
   );
 
@@ -21,10 +16,7 @@ function GameListItem(props) {
     <div>
       {joinGame}
       <span>Game: {props.game.id}</span>
-      <button
-        onClick={() => {
-          props.deleteGameHandler(props.game.id);
-        }}
+      <button onClick={props.deleteGameHandler}
       >delete</button>
     </div>
   );

@@ -1,48 +1,45 @@
 import React, { PureComponent } from 'react';
 import axios from '../../axios.js';
-import {
-    Redirect
-} from "react-router-dom";
+import { Redirect } from "react-router-dom";
+
+import MyContext from '../../context.js';
 
 import GameListItem from '../games_list_item/games_list_item.js'
 
 class GameList extends PureComponent {
+  static contextType = MyContext;
+
   state = {
     games: [],
   }
 
   createGameHandler = () => {
     let params = {
-      token: this.props.user.token
+      token: this.context.user.token
     }
-    axios.post('/games', params).then(res => {
-      this.props.clearErrors();
-      return res.data;
-    }).then(data => {
+    axios.post('/games', params).then(res => res.data).then(data => {
       let oldGames = this.state.games;
       let newGames = oldGames.concat(data);
       this.setState({games: newGames});
+      this.context.clearErrors();
     }).catch(err => {
-      this.props.onErrorHandler(err.data.error_message);
+      this.context.addError(err.data.error_message);
     });
   }
 
   deleteGameHandler = id => {
     let params = {
       data: {
-        token: this.props.user.token
+        token: this.context.user.token
       }
     }
-    axios.delete(`/games/${id}`, params).then(res => {
-      return res.data;
-    }).then(data => {
-      this.setState(state => {
-        let oldGames = state.games;
-        let newGames = oldGames.filter(game => game.id !== id);
-        return { games: newGames };
-      });
+    axios.delete(`/games/${id}`, params).then(res => res.data).then(data => {
+      let oldGames = this.state.games;
+      let newGames = oldGames.filter(game => game.id !== id);
+      this.setState({ games: newGames });
+      this.context.clearErrors();
     }).catch(err => {
-      this.props.onErrorHandler(err.data.error_message);
+      this.context.addError(err.data.error_message);
     })
   }
 
@@ -50,24 +47,23 @@ class GameList extends PureComponent {
   setGames = () => {
     axios.get('/games').then(res => {
       this.setState({ games: res.data });
+      this.context.clearErrors();
     }).catch(err => {
-      this.props.onErrorHandler(err.data.error_message);
+      this.context.addError(err.data.error_message);
     });
   }
 
   componentDidMount() {
-    if (this.props.user) {
-      this.setGames();
-    }
+    this.setGames();
   }
 
   render() {
-    if (!this.props.user) {
+    if (!this.context.user) {
       return <Redirect to="/" />;
     }
 
     let createGame = null;
-    if (this.props.user.admin) {
+    if (this.context.user.admin) {
       createGame = (
         <button
           onClick={this.createGameHandler}
@@ -78,8 +74,7 @@ class GameList extends PureComponent {
     let games = this.state.games.map(game => {
       return (
         <GameListItem
-          deleteGameHandler={this.deleteGameHandler}
-          selectGameHandler={this.props.selectGame}
+          deleteGameHandler={() => this.deleteGameHandler(game.id)}
           key={game.id}
           game={game} />
       );
@@ -88,7 +83,7 @@ class GameList extends PureComponent {
     return (
       <div>
         {createGame}
-        <h1>Hello {this.props.user.email}!</h1>
+        <h1>Hello {this.context.user.email}!</h1>
         {games}
       </div>
     );
