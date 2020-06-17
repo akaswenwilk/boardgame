@@ -5,7 +5,6 @@ class PlayerBoard extends Component {
     let player = this.props.player;
     let board = player.player_board;
 
-    console.log(board);
     return (
       <div>
         <p>Player</p>

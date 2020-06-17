@@ -1,0 +1,36 @@
+.Tile {
+  height: 30px;
+  width: 30px;
+  border: 1px solid black;
+  display: inline-block;
+  margin: 5px;
+}
+
+.First {
+  background-color: white;
+  text-align: center;
+}
+
+.First::after {
+  content: "1";
+}
+
+.Yellow {
+  background-color: yellow;
+}
+
+.Red {
+  background-color: red;
+}
+
+.Blue {
+  background-color: blue;
+}
+
+.LightBlue {
+  background-color: aqua;
+}
+
+.Black {
+  background-color: black;
+}

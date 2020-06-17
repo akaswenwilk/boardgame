@@ -23,6 +23,8 @@ class GameService
       game_repo.update(game)
     end
 
+    get_attributes_for_full_game(game)
+
     game
   end
 
@@ -132,6 +134,11 @@ class GameService
   end
 
   private
+
+  def get_attributes_for_full_game(game)
+    game.players = player_repo.all_by_game(game)
+    game.players.each { |p| p.player_board = player_board_repo.find_by_player(p.id) }
+  end
 
   def valid_move_choice!(game:, player_id:, tile_holder:, color:)
     raise ValidationError.new("Game must first be started") unless game.started

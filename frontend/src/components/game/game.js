@@ -8,6 +8,8 @@ import {
 import MyContext from '../../context.js';
 
 import PlayerBoard from '../../components/player_board/player_board.js';
+import CenterTileHolder from '../../components/center_tile_holder/center_tile_holder.js';
+import OutsideTileHolder from '../../components/outside_tile_holder/outside_tile_holder.js';
 
 class Game extends Component {
   static contextType = MyContext;
@@ -22,7 +24,6 @@ class Game extends Component {
     axios.get(`/games/${id}`).then(res => {
       this.context.addGame(res.data);
     }).catch(err => {
-      console.log(err);
       this.context.addError(err.data.error_message);
     });
   }
@@ -47,6 +48,16 @@ class Game extends Component {
     }
   }
 
+  startGameHandler = () => {
+    let params = {
+      token: this.context.user.token
+    }
+
+    axios.post(`/games/${this.context.currentGame.id}/start`, params).then(res => res.data).then(data => {
+      this.context.addGame(data);
+    }).catch(err => this.context.addError(err.data.error_message));
+  }
+
   render() {
     let game = this.context.currentGame;
 
@@ -61,14 +72,27 @@ class Game extends Component {
         );
       })
 
+      let startGame = null;
+
+      if (game.players.length > 1 && !game.started) {
+        startGame = (
+          <button onClick={this.startGameHandler}>Start Game</button>
+        );
+      }
+      let outsideTileHolders = JSON.parse(game.outside_tile_holders).map( holder => {
+        return (
+          <OutsideTileHolder tiles={holder.tiles} />
+        )
+      });
+
       gameComponent = (
         <>
           <Link to="/games">return to games</Link>
-          <h1>here's the game!</h1>
+          <h1>here's the game! {startGame}</h1>
           <p>ID: {game.id}</p>
           <p>Started: {game.started.toString()}</p>
-          <p>center tile holder: {game.center_tile_holder}</p>
-          <p>outside tile holders: {game.outside_tile_holders}</p>
+          <CenterTileHolder tiles={JSON.parse(game.center_tile_holder).tiles}/>
+          {outsideTileHolders}
           <p>player order: {game.player_order}</p>
           <p>players: </p>
           {players}
@@ -81,6 +105,11 @@ class Game extends Component {
         <label>Name for a new player!</label>
         <input
           onChange={this.nameChangedHandler}
+          onKeyPress={e => {
+            if (e.key === 'Enter' && this.state.name) {
+              this.submitPlayerHandler();
+            }
+          }}
           type="text"
           value={this.state.name} />
         <button onClick={this.submitPlayerHandler}>Create!</button>

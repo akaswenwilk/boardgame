@@ -61,7 +61,9 @@ class Api < Hanami::API
 
     game = GameService.new.start(params[:game_id])
 
-    [200, game.attributes.to_json]
+    Hanami::Logger.new(stream: 'logfile.log').info("the new game #{game.inspect}")
+
+    [200, game.full_attributes.to_json]
   end
 
   post "games/:game_id/players/:player_id/possible_moves" do
