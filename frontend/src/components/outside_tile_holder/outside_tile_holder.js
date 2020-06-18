@@ -7,7 +7,9 @@ class OutsideTileHolder extends Component {
   render() {
     let tiles = this.props.tiles.map(tile => {
       return (
-        <Tile key={tile.id} color={tile.color} />
+        <Tile
+          key={tile.id}
+          color={tile.color} />
       )
     });
 

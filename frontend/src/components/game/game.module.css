@@ -1,0 +1,22 @@
+.Holders {
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 50%;
+  height: 800px;
+  width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.CenterTileHolder {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.OutsideTileHolder {
+  position: absolute;
+  left: 50%;
+  height: 100%;
+}

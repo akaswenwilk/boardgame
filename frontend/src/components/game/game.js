@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 
 import MyContext from '../../context.js';
+import styles from './game.module.css';
 
 import PlayerBoard from '../../components/player_board/player_board.js';
 import CenterTileHolder from '../../components/center_tile_holder/center_tile_holder.js';
@@ -79,9 +80,32 @@ class Game extends Component {
           <button onClick={this.startGameHandler}>Start Game</button>
         );
       }
-      let outsideTileHolders = JSON.parse(game.outside_tile_holders).map( holder => {
+      let outsideTileHolders = JSON.parse(game.outside_tile_holders).map((holder, i) => {
+        let distanceBetween;
+        switch (JSON.parse(game.outside_tile_holders).length) {
+          case 5:
+            distanceBetween = 72;
+            break;
+          case 7:
+            distanceBetween = 51;
+            break;
+          default:
+            distanceBetween = 40;
+            break;
+        }
+        let transformDeg = distanceBetween * i;
+
+        const transform = {
+          transform: `translateX(-50%) rotate(${transformDeg}deg)`
+        };
         return (
-          <OutsideTileHolder tiles={holder.tiles} />
+          <div
+            key={i}
+            style={transform}
+            className={styles.OutsideTileHolder}>
+            <OutsideTileHolder
+              tiles={holder.tiles} />
+          </div>
         )
       });
 
@@ -91,8 +115,12 @@ class Game extends Component {
           <h1>here's the game! {startGame}</h1>
           <p>ID: {game.id}</p>
           <p>Started: {game.started.toString()}</p>
-          <CenterTileHolder tiles={JSON.parse(game.center_tile_holder).tiles}/>
-          {outsideTileHolders}
+          <div className={styles.Holders}>
+            <div className={styles.CenterTileHolder}>
+              <CenterTileHolder tiles={JSON.parse(game.center_tile_holder).tiles}/>
+            </div>
+            {outsideTileHolders}
+          </div>
           <p>player order: {game.player_order}</p>
           <p>players: </p>
           {players}

@@ -7,7 +7,11 @@ class GameService
   end
 
   def get_all_games
-    game_repo.get_all
+    games = game_repo.get_all
+    games.each do |game|
+      get_attributes_for_full_game(game)
+    end
+    games
   end
 
   def start(game_id)

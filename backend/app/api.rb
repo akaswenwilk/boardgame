@@ -39,7 +39,7 @@ class Api < Hanami::API
   get "/games" do
     games = GameService.new.get_all_games
 
-    [200, games.map(&:attributes).to_json]
+    [200, games.map(&:full_attributes).to_json]
   end
 
   post "/games/:game_id/players" do
