@@ -1,11 +1,18 @@
-.Holders {
+.Game {
   border: 1px solid black;
+  margin: 10px;
+  position: relative;
+  height: 1700px;
+}
+
+.Holders {
   padding: 10px;
   border-radius: 50%;
-  height: 800px;
-  width: 800px;
+  width: 50%;
+  height: 50%;
   margin: 0 auto;
-  position: relative;
+  position: absolute;
+  right: 4%;
 }
 
 .CenterTileHolder {
@@ -19,4 +26,11 @@
   position: absolute;
   left: 50%;
   height: 100%;
+}
+
+.Player {
+  display: inline-block;
+  width: 40%;
+  height: 25%;
+  position: absolute;
 }

@@ -65,11 +65,18 @@ class Game extends Component {
     let gameComponent = null;
 
     if (game) {
-      let players = game.players.map(player => {
+      let players = game.players.map((player, i) => {
+        let height = {
+          top: `${i * 25}%`
+        }
         return (
-          <PlayerBoard
+          <div
             key={player.id}
-            player={player} />
+            style={height}
+            className={styles.Player}>
+            <PlayerBoard
+              player={player} />
+          </div>
         );
       })
 
@@ -79,6 +86,13 @@ class Game extends Component {
         startGame = (
           <button onClick={this.startGameHandler}>Start Game</button>
         );
+      }
+
+      if (game.started) {
+        let currentPlayer = game.players.find(p => p.id === game.current_player_id);
+        startGame = (
+          <span>Player's Turn: {currentPlayer.name}</span>
+        )
       }
       let outsideTileHolders = JSON.parse(game.outside_tile_holders).map((holder, i) => {
         let distanceBetween;
@@ -113,17 +127,16 @@ class Game extends Component {
         <>
           <Link to="/games">return to games</Link>
           <h1>here's the game! {startGame}</h1>
-          <p>ID: {game.id}</p>
-          <p>Started: {game.started.toString()}</p>
-          <div className={styles.Holders}>
-            <div className={styles.CenterTileHolder}>
-              <CenterTileHolder tiles={JSON.parse(game.center_tile_holder).tiles}/>
+          <div className={styles.Game}>
+            <div className={styles.Holders}>
+              <div className={styles.CenterTileHolder}>
+                <CenterTileHolder
+                  tiles={JSON.parse(game.center_tile_holder).tiles}/>
+              </div>
+              {outsideTileHolders}
             </div>
-            {outsideTileHolders}
+            {players}
           </div>
-          <p>player order: {game.player_order}</p>
-          <p>players: </p>
-          {players}
         </>
       );
     }

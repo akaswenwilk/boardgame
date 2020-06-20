@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from './axios.js';
 import {
     BrowserRouter as Router,
     Switch,

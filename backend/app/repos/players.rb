@@ -14,7 +14,10 @@ class PlayerRepo
   end
 
   def all_by_game(game)
-    players = @player.where(game_id: game.id).all
+    players = []
+    game.player_order.each do |id|
+      players.push(@player.where(id: id).first)
+    end
     players.map! { |data| Player.new(data) }
   end
 

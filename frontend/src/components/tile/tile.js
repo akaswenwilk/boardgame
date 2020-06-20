@@ -23,6 +23,13 @@ function Tile(props) {
     case 'black':
       stylesClasses.push(styles.Black);
       break;
+    default:
+      stylesClasses.push(styles.Empty);
+      break;
+  }
+
+  if (props.inactive) {
+    stylesClasses.push(styles.Inactive);
   }
 
   return (

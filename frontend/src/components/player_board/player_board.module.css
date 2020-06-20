@@ -1,0 +1,59 @@
+.Board {
+  height: 100%;
+  position: relative;
+  border: 1px solid black;
+}
+
+.Board::after {
+  height: 100%;
+  width: 100%;
+  content: '';
+  position: absolute;
+  top: 0;
+  background-color: gray;
+  opacity: 0.2;
+}
+
+.Active {
+  border: 5px solid red;
+  height: 100%;
+  position: relative;
+}
+
+.NegativeSpaces {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border: 1px solid blue;
+}
+
+.NegativeSpaces h6 {
+  position: absolute;
+  bottom: 50%;
+  display: inline-block;
+}
+
+.NegativeSpace {
+  display: inline-block;
+  text-align: center;
+}
+
+.NegativeSpace p {
+  position: relative;
+  top: 15px;
+}
+
+.PlayingSpaces {
+  border: 1px solid black;
+  width: 45%;
+  position: absolute;
+  text-align: right;
+}
+
+.EndingSpaces {
+  border: 1px solid black;
+  width: 45%;
+  position: absolute;
+  right: 0;
+}
+

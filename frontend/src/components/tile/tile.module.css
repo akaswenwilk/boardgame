@@ -7,7 +7,7 @@
 }
 
 .First {
-  background-color: white;
+  background-color: beige;
   text-align: center;
 }
 
@@ -33,4 +33,12 @@
 
 .Black {
   background-color: black;
+}
+
+.Empty {
+  background-color: white;
+}
+
+.Inactive {
+  opacity: 0.2;
 }
