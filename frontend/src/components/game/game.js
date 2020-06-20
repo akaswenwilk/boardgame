@@ -112,12 +112,15 @@ class Game extends Component {
         const transform = {
           transform: `translateX(-50%) rotate(${transformDeg}deg)`
         };
+
         return (
           <div
             key={i}
             style={transform}
             className={styles.OutsideTileHolder}>
             <OutsideTileHolder
+              selectedColor={this.context.selectedHolder === i ? this.context.selectedColor : null}
+              number={i}
               tiles={holder.tiles} />
           </div>
         )

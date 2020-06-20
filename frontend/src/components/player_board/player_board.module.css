@@ -24,7 +24,6 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  border: 1px solid blue;
 }
 
 .NegativeSpaces h6 {
@@ -57,3 +56,15 @@
   right: 0;
 }
 
+.Selectable {
+  position: relative;
+}
+
+.Selectable::before {
+  content: '-->';
+  color: magenta;
+  position: absolute;
+  left: 0;
+  top: 25%;
+  box-sizing: border-box;
+}

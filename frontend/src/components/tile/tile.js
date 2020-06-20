@@ -32,6 +32,10 @@ function Tile(props) {
     stylesClasses.push(styles.Inactive);
   }
 
+  if (props.selected) {
+    stylesClasses.push(styles.Selected);
+  }
+
   return (
     <div className={stylesClasses.join(' ')}>
     </div>

@@ -9,17 +9,11 @@ import MyContext from '../../context.js';
 class PlayerBoard extends Component {
   static contextType = MyContext;
 
-  constructor(props, context) {
-    super(props, context)
-
-    let active = false;
-
-    if (context.currentGame.current_player_id === props.player.id) {
-      active = true;
-    }
-
-    this.state = {
-      active: active
+  activeComponent = () => {
+    if (this.context.currentGame.current_player_id === this.props.player.id) {
+      return true;
+    } else {
+      return false
     }
   }
 
@@ -68,11 +62,26 @@ class PlayerBoard extends Component {
           <Tile key={j} color={color}/>
         )
       }
-      rows.push(
-        <div key={i}>
+      let selectable = null;
+
+      if (this.activeComponent() && this.context.possibleRows.includes(i)) {
+        selectable = styles.Selectable
+      }
+
+      let result = (
+        <div
+          onClick={() => {
+            if (selectable) {
+              this.context.makeMove(i);
+            }
+          }}
+          className={selectable}
+          key={i}>
           {tiles}
         </div>
-      )
+      );
+
+      rows.push(result)
     }
 
     return rows;
@@ -123,7 +132,7 @@ class PlayerBoard extends Component {
     let board = player.player_board;
 
     return (
-      <div className={this.state.active ? styles.Active : styles.Board}>
+      <div className={this.activeComponent() ? styles.Active : styles.Board}>
         <h2>{player.name}</h2>
         <p>Points {board.points}</p>
         <div className={styles.PlayingSpaces}>

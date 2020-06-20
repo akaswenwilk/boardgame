@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import MyContext from './context.js';
+import axios from './axios.js';
 
 class GlobalStateProvider extends Component {
   state = {
     user: null,
     errors: null,
-    currentGame: null
+    currentGame: null,
+    selectedHolder: null,
+    selectedColor: null,
+    possibleRows: []
   }
 
   componentDidMount() {
@@ -14,6 +18,53 @@ class GlobalStateProvider extends Component {
       if (user) {
         this.setState({ user: user });
       }
+    }
+  }
+
+  makeMoveHandler = n => {
+    let params = {
+      token: this.state.user.token,
+      color: this.state.selectedColor,
+      tile_holder: this.state.selectedHolder,
+      row: n,
+    }
+
+    axios.post(`/games/${this.state.currentGame.id}/players/${this.state.currentGame.current_player_id}/move`, params)
+      .then(res => res.data).then(data => {
+        this.setState({
+          errors: null,
+          currentGame: data,
+          selectedHolder: null,
+          selectedColor: null,
+          possibleRows: [],
+        });
+      }).catch(err => this.addErrorHandler(err.data));
+  }
+
+  selectHolderAndColorHandler = (holder, color) => {
+    let params = {
+      token: this.state.user.token,
+      color: color,
+      tile_holder: holder,
+    }
+
+    axios.post(`/games/${this.state.currentGame.id}/players/${this.state.currentGame.current_player_id}/possible_moves`, params)
+      .then(res => res.data).then(data => {
+        this.setState({
+          errors: null,
+          selectedHolder: holder,
+          selectedColor: color,
+          possibleRows: data.possible_rows
+        });
+      }).catch(err => this.addErrorHandler(err.data));
+  }
+
+  canMakeMoveHandler = () => {
+    if (this.state.currentGame && this.state.user) {
+      let currentPlayer = this.state.currentGame.players.find(p => p.id === this.state.currentGame.current_player_id);
+      return currentPlayer.user_id === this.state.user.id;
+    } else {
+      return false;
     }
   }
 
@@ -53,6 +104,12 @@ class GlobalStateProvider extends Component {
           addUser: this.addUserHandler,
           addGame: this.addGameHandler,
           clearAll: this.clearAllHandler,
+          canMakeMove: this.canMakeMoveHandler,
+          selectHolderAndColor: this.selectHolderAndColorHandler,
+          selectedHolder: this.state.selectedHolder,
+          selectedColor: this.state.selectedColor,
+          possibleRows: this.state.possibleRows,
+          makeMove: this.makeMoveHandler,
         }}>
         {this.props.children}
       </MyContext.Provider>

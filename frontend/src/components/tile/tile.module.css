@@ -42,3 +42,7 @@
 .Inactive {
   opacity: 0.2;
 }
+
+.Selected {
+  border: 5px solid magenta;
+}
