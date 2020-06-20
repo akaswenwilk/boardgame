@@ -23,7 +23,7 @@ class GameList extends PureComponent {
       this.setState({games: newGames});
       this.context.clearErrors();
     }).catch(err => {
-      this.context.addError(err.data.error_message);
+      this.context.addError(err.error_message);
     });
   }
 
@@ -39,7 +39,7 @@ class GameList extends PureComponent {
       this.setState({ games: newGames });
       this.context.clearErrors();
     }).catch(err => {
-      this.context.addError(err.data.error_message);
+      this.context.addError(err.error_message);
     })
   }
 
@@ -49,7 +49,7 @@ class GameList extends PureComponent {
       this.setState({ games: res.data });
       this.context.clearErrors();
     }).catch(err => {
-      this.context.addError(err.data.error_message);
+      this.context.addError(err.error_message);
     });
   }
 

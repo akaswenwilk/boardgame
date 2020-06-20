@@ -61,8 +61,6 @@ class Api < Hanami::API
 
     game = GameService.new.start(params[:game_id])
 
-    Hanami::Logger.new(stream: 'logfile.log').info("the new game #{game.inspect}")
-
     [200, game.full_attributes.to_json]
   end
 
@@ -99,7 +97,8 @@ class Api < Hanami::API
     tile_holder = params[:tile_holder]
     tile_holder = tile_holder.to_i unless tile_holder == 'center'
     color = params[:color]
-    row = params[:row].to_i
+    row = params[:row]
+    row = row.to_i unless row == 'negative'
 
     args = {
       game_id: game_id,
@@ -112,7 +111,7 @@ class Api < Hanami::API
 
     raise InvalidParamsError.new("require both a tile_holder and a color and a row in params") unless tile_holder && color && row
     raise InvalidParamsError.new("Color must be either #{Tile::COLORS.join(', ')}") unless Tile::COLORS.include?(color)
-    raise InvalidParamsError.new("row must be between 0 and 4") unless row >= 0 && row <= 4
+    raise InvalidParamsError.new("row must be between 0 and 4") unless row == 'negative' || row >= 0 && row <= 4
 
     full_game = GameService.new.move(**args)
 

@@ -77,7 +77,7 @@ class PlayerBoard extends Component {
           }}
           className={selectable}
           key={i}>
-          {tiles}
+          {tiles.reverse()}
         </div>
       );
 
@@ -95,8 +95,9 @@ class PlayerBoard extends Component {
 
     for (let i = 0; i < 7; i++) {
       let color = 'empty'
-      if (board.negative_spaces[i]) {
-        color = board.negative_spaces[i].color
+      let parsedNegativeSpaces = JSON.parse(board.negative_spaces);
+      if (parsedNegativeSpaces[i]) {
+        color = parsedNegativeSpaces[i].color
       }
       let minus = null;
       switch (i) {
@@ -117,6 +118,11 @@ class PlayerBoard extends Component {
       negativeSpaces.push(
         <div
           key={i}
+          onClick={() => {
+            if (this.activeComponent() && this.context.selectedColor) {
+              this.context.makeMove('negative')
+            }
+          }}
           className={styles.NegativeSpace}>
           {minus}
           <Tile color={color} />

@@ -7,6 +7,8 @@ class ErrorHandler
     begin
       result = @app.call(env)
     rescue => e
+      Hanami::Logger.new(stream: 'logfile.log').error(e.inspect)
+
       response_body = {
         "error_type" => e.class.name,
         "error_message" => e.message,

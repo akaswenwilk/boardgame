@@ -76,6 +76,7 @@ class GameService
     raise ValidationError.new("not a valid move") unless player_board.valid_move?(row, color)
 
     tiles = game.tiles_from_holder(tile_holder, color)
+    Hanami::Logger.new(stream: 'logfile.log').info("tiles #{tiles.inspect}")
     player_board.add_tiles(tiles, row, game)
 
     player_board_repo.update(player_board)
@@ -96,9 +97,14 @@ class GameService
       game.increment_current_player
     end
 
+    game.players.each do |player|
+      player_board_repo.update(player_board)
+    end
+
     if game_over
       game.players.each do |player|
         player.player_board.score_special_points
+        player_board_repo.update(player.player_board)
       end
       players = game.players.map { |p| [p.player_board.points, p.id] }
       winner = players.max { |a, b| a[0] <=> b[0] }
@@ -110,12 +116,11 @@ class GameService
       game.started = false
     end
 
-
-
-
+    game.players.each do |player|
+      player_board_repo.update(player_board)
+    end
 
     game_repo.update(game)
-    player_board_repo.update(player_board)
 
     game.full_attributes
   end

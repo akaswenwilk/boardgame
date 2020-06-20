@@ -25,7 +25,7 @@ class Game extends Component {
     axios.get(`/games/${id}`).then(res => {
       this.context.addGame(res.data);
     }).catch(err => {
-      this.context.addError(err.data.error_message);
+      this.context.addError(err.error_message);
     });
   }
 
@@ -45,7 +45,7 @@ class Game extends Component {
 
       axios.post(`/games/${id}/players`, params).then(res => res.data).then(data => {
         this.context.addGame(data);
-      }).catch(err => this.context.addError(err.data.error_message));
+      }).catch(err => this.context.addError(err.response.data.error_message));
     }
   }
 
@@ -56,7 +56,7 @@ class Game extends Component {
 
     axios.post(`/games/${this.context.currentGame.id}/start`, params).then(res => res.data).then(data => {
       this.context.addGame(data);
-    }).catch(err => this.context.addError(err.data.error_message));
+    }).catch(err => this.context.addError(err.error_message));
   }
 
   render() {
@@ -134,6 +134,7 @@ class Game extends Component {
             <div className={styles.Holders}>
               <div className={styles.CenterTileHolder}>
                 <CenterTileHolder
+                  selectedColor={this.context.selectedHolder === 'center' ? this.context.selectedColor : null}
                   tiles={JSON.parse(game.center_tile_holder).tiles}/>
               </div>
               {outsideTileHolders}
@@ -151,6 +152,7 @@ class Game extends Component {
           onChange={this.nameChangedHandler}
           onKeyPress={e => {
             if (e.key === 'Enter' && this.state.name) {
+              this.setState({name: ''});
               this.submitPlayerHandler();
             }
           }}
@@ -166,8 +168,8 @@ class Game extends Component {
 
     return (
       <div>
-        {gameComponent}
         {addPlayer}
+        {gameComponent}
       </div>
     );
   }

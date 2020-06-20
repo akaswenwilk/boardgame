@@ -109,7 +109,7 @@ class Game
       selected_holder.tiles = []
     end
 
-    result
+    result.compact
   end
 
   def end_of_round?

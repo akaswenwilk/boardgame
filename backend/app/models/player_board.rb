@@ -61,6 +61,7 @@ class PlayerBoard
   end
 
   def valid_move?(n, color)
+    return true if n == 'negative'
     row = playing_spaces[n].with_indifferent_access
     return false if row[:tiles].length >= row[:max_length]
 
@@ -79,12 +80,28 @@ class PlayerBoard
   end
 
   def add_tiles(tiles, n, game)
-    row = playing_spaces[n].with_indifferent_access
+    unless n == 'negative'
+      row = playing_spaces[n].with_indifferent_access
 
-    tiles.each do |tile|
-      unless row[:tiles].length >= row[:max_length] || tile.color == Tile::FIRST
-        row[:tiles] << tile
-      else
+      tiles.each do |tile|
+        unless row[:tiles].length >= row[:max_length] || tile.color == Tile::FIRST
+          row[:tiles] << tile
+        else
+          if negative_spaces.length < 7
+            negative_spaces << tile
+          elsif negative_spaces.length >= 7 && tile.color == Tile::FIRST
+            old_tile = negative_spaces.shift
+            negative_spaces.unshift(tile)
+            game.used_tiles << old_tile
+          else
+            game.used_tiles << tile
+          end
+        end
+      end
+
+      playing_spaces[n] = row
+    else
+      tiles.each do |tile|
         if negative_spaces.length < 7
           negative_spaces << tile
         elsif negative_spaces.length >= 7 && tile.color == Tile::FIRST
@@ -96,8 +113,6 @@ class PlayerBoard
         end
       end
     end
-
-    playing_spaces[n] = row
   end
 
   def score_points(game)
@@ -105,7 +120,8 @@ class PlayerBoard
       space = space.with_indifferent_access
       if space[:tiles].length >= space[:max_length]
         ending_space = ending_spaces[i]["tiles"].find { |s| s["color"] == space[:tiles].first.color }
-        move_tiles(space, ending_space, game)
+        ending_space["id"] = space[:tiles].first.id
+        space[:tiles] = []
         row = i
         column = ending_spaces[i]["tiles"].index(ending_space)
         add_horizontal_points(row, column)
@@ -214,17 +230,6 @@ class PlayerBoard
 
       self.points += 1
       i += 1
-    end
-  end
-
-  def move_tiles(space, ending_space, game)
-    space[:max_length].times do |n|
-        tile = space[:tiles].pop
-      if n == 0
-        ending_space["id"] = tile.id
-      else
-        game.used_tiles << tile
-      end
     end
   end
 
