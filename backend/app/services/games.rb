@@ -76,7 +76,6 @@ class GameService
     raise ValidationError.new("not a valid move") unless player_board.valid_move?(row, color)
 
     tiles = game.tiles_from_holder(tile_holder, color)
-    Hanami::Logger.new(stream: 'logfile.log').info("tiles #{tiles.inspect}")
     player_board.add_tiles(tiles, row, game)
 
     player_board_repo.update(player_board)
@@ -90,6 +89,7 @@ class GameService
       game.current_player_id = first_player.id
       game.players.each do |player|
         player.player_board.score_points(game)
+        Hanami::Logger.new(stream: 'logfile.log').info("after scoring #{player.player_board.playing_spaces}")
         game_over ||= true if player.player_board.has_full_row?
       end
       game.distribute_tiles_to_outside_holders
@@ -98,7 +98,7 @@ class GameService
     end
 
     game.players.each do |player|
-      player_board_repo.update(player_board)
+      player_board_repo.update(player.player_board)
     end
 
     if game_over
@@ -117,7 +117,7 @@ class GameService
     end
 
     game.players.each do |player|
-      player_board_repo.update(player_board)
+      player_board_repo.update(player.player_board)
     end
 
     game_repo.update(game)

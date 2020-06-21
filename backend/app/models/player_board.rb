@@ -116,16 +116,24 @@ class PlayerBoard
   end
 
   def score_points(game)
-    playing_spaces.each_with_index do |space, i|
+    playing_spaces.map!.with_index do |space, i|
       space = space.with_indifferent_access
       if space[:tiles].length >= space[:max_length]
         ending_space = ending_spaces[i]["tiles"].find { |s| s["color"] == space[:tiles].first.color }
         ending_space["id"] = space[:tiles].first.id
+        leftover_tiles = space[:tiles][1..-1]
+        game.used_tiles << leftover_tiles
+        game.used_tiles.flatten!
         space[:tiles] = []
         row = i
         column = ending_spaces[i]["tiles"].index(ending_space)
-        add_horizontal_points(row, column)
-        add_vertical_points(row, column)
+        hpoints = horizontal_points(row, column)
+        vpoints = vertical_points(row, column)
+        result = add_points(hpoints, vpoints)
+        self.points += result
+        space
+      else
+        space
       end
     end
 
@@ -166,6 +174,20 @@ class PlayerBoard
 
   private
 
+  def add_points(hpoints, vpoints)
+    total_points = 0
+    if hpoints == 1 && vpoints > 1
+      total_points += vpoints
+    elsif vpoints == 1 && hpoints > 1
+      total_points += hpoints
+    elsif vpoints > 1 && hpoints > 1
+      total_points += vpoints + hpoints
+    else
+      total_points += 1
+    end
+    total_points
+  end
+
   def score_horizontal_rows
     ending_spaces.each do |es|
       self.points += 2 if es["tiles"].none? { |t| t["id"].nil? }
@@ -195,42 +217,46 @@ class PlayerBoard
     end
   end
 
-  def add_vertical_points(row, column)
-    self.points += 1
+  def vertical_points(row, column)
+    vpoints = 1
+
     i = row - 1
-    until i <= 0
+    until i < 0
       break if ending_spaces[i]["tiles"][column]["id"].nil?
 
-      self.points += 1
+      vpoints += 1
       i -= 1
     end
 
     i = row + 1
-    until i >= 4
+    until i > 4
       break if ending_spaces[i]["tiles"][column]["id"].nil?
 
-      self.points += 1
+      vpoints += 1
       i += 1
     end
+
+    vpoints
   end
 
-  def add_horizontal_points(row, column)
-    self.points += 1
+  def horizontal_points(row, column)
+    hpoints = 1
     i = column - 1
-    until i <= 0
+    until i < 0
       break if ending_spaces[row]["tiles"][i]["id"].nil?
 
-      self.points += 1
+      hpoints += 1
       i -= 1
     end
 
     i = column + 1
-    until i >= 4
+    until i > 4
       break if ending_spaces[row]["tiles"][i]["id"].nil?
 
-      self.points += 1
+      hpoints += 1
       i += 1
     end
+    hpoints
   end
 
   def new_playing_spaces
