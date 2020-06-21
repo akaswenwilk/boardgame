@@ -82,7 +82,7 @@ class Game extends Component {
 
       let startGame = null;
 
-      if (game.players.length > 1 && !game.started) {
+      if (game.players.length > 1 && !game.started && !game.winner_name) {
         startGame = (
           <button onClick={this.startGameHandler}>Start Game</button>
         );
@@ -128,7 +128,6 @@ class Game extends Component {
 
       gameComponent = (
         <>
-          <Link to="/games">return to games</Link>
           <h1>here's the game! {startGame}</h1>
           <div className={styles.Game}>
             <div className={styles.Holders}>
@@ -162,14 +161,38 @@ class Game extends Component {
       </div>
     );
 
-    if (game && (game.started || game.players.length >= 4)) {
+    if (game && (game.started || game.players.length >= 4 || game.winner_name)) {
       addPlayer = null;
     }
 
+    let winner = null;
+
+    if (game && game.winner_name) {
+      let winningText;
+      if (game.winner_name === 'tie') {
+        winningText = "It's a Tie!"
+      } else {
+        let playerId = Number(game.winner_name);
+        let winningPlayer = game.players.find(p => p.id === playerId);
+        winningText = `${winningPlayer.name} won!!!`.toUpperCase();
+      }
+
+      winner = (
+        <div className={styles.Winner}>
+          <h1>{winningText}</h1>
+        </div>
+      );
+    }
+
+    console.log(game);
     return (
       <div>
         {addPlayer}
-        {gameComponent}
+        <Link to="/games">return to games</Link>
+        <div style={{position: 'relative'}}>
+          {winner}
+          {gameComponent}
+        </div>
       </div>
     );
   }

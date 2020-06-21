@@ -137,7 +137,6 @@ class PlayerBoard extends Component {
     let player = this.props.player;
     let board = player.player_board;
 
-    console.log(board);
     return (
       <div className={this.activeComponent() ? styles.Active : styles.Board}>
         <h2>{player.name}</h2>
