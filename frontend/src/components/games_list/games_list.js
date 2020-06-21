@@ -8,6 +8,7 @@ import GameListItem from '../games_list_item/games_list_item.js'
 
 class GameList extends PureComponent {
   static contextType = MyContext;
+  _isMounted = false;
 
   state = {
     games: [],
@@ -46,15 +47,23 @@ class GameList extends PureComponent {
 
   setGames = () => {
     axios.get('/games').then(res => {
-      this.setState({ games: res.data });
-      this.context.clearErrors();
+      if (this._isMounted) {
+        this.setState({ games: res.data });
+        this.context.clearErrors();
+      }
     }).catch(err => {
       this.context.addError(err.error_message);
     });
   }
 
   componentDidMount() {
+    this._isMounted = true;
+
     this.setGames();
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   render() {

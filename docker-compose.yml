@@ -12,6 +12,8 @@ services:
       - '/app/node_modules'
     ports:
       - 3001:3000
+    depends_on:
+      - websocket
     environment:
       - CHOKIDAR_USEPOLLING=true
   backend:
@@ -41,5 +43,14 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=azul
+  websocket:
+    container_name: socket
+    build:
+      context: ./websocket
+      dockerfile: Dockerfile
+    volumes:
+      - './websocket:/app'
+    ports:
+      - 8080:8080
 volumes:
   db_data:

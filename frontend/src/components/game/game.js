@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from '../../axios.js';
+import _ from 'lodash';
 import {
   Link,
   withRouter
@@ -7,6 +8,7 @@ import {
 
 import MyContext from '../../context.js';
 import styles from './game.module.css';
+import socket from '../../socket.js';
 
 import PlayerBoard from '../../components/player_board/player_board.js';
 import CenterTileHolder from '../../components/center_tile_holder/center_tile_holder.js';
@@ -17,6 +19,23 @@ class Game extends Component {
 
   state = {
     name: ''
+  }
+
+  componentWillMount() {
+    socket.newSocket = new WebSocket("ws://localhost:8080");
+    socket.newSocket.onmessage = e => {
+      try {
+        let incoming = JSON.parse(e.data);
+        console.log(this.context.currentGame);
+        if (this.context.currentGame && (!_.isEqual(incoming, this.context.currentGame))) {
+          console.log('setting game');
+          this.context.addGame(incoming);
+        }
+      } catch(err) {
+        console.log('got an error', err);
+        console.log('when trying to parse', e.data);
+      }
+    }
   }
 
   componentDidMount() {
@@ -184,7 +203,6 @@ class Game extends Component {
       );
     }
 
-    console.log(game);
     return (
       <div>
         {addPlayer}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MyContext from './context.js';
 import axios from './axios.js';
+import socket from './socket.js';
 
 class GlobalStateProvider extends Component {
   state = {
@@ -82,6 +83,7 @@ class GlobalStateProvider extends Component {
 
   addGameHandler = (game, errors = null) => {
     this.setState({ currentGame: game, errors: errors });
+    socket.newSocket.send(JSON.stringify(game));
   }
 
   clearAllHandler = () => {
