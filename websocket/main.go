@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/websocket"
 )
@@ -13,38 +14,74 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
+		//fmt.Println(r)
 		return true
 	},
 }
 
-func check(err error) {
-	if err != nil {
-		log.Println(err)
-		panic(err)
+func parseUrl(url string) (string, string, error) {
+	paths := strings.Split(url, "/")
+	if len(paths) != 5 || paths[1] != "games" || paths[3] != "users" {
+		err := fmt.Errorf("invalid URL for %v", url)
+		return "", "", err
+	} else {
+		fmt.Println("valid url")
+		return paths[2], paths[4], nil
 	}
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
+func Handler(w http.ResponseWriter, r *http.Request) {
+	gameId, userId, err := parseUrl(r.URL.Path)
+	if err != nil {
+		log.Println(err)
+		return
+	}
 	conn, err := upgrader.Upgrade(w, r, nil)
-	check(err)
-	fmt.Println(conn)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer conn.Close()
+
+	hub, err := FindOrCreateHubByGameId(gameId)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer hub.Delete()
+
+	client := NewClient(conn, userId, gameId)
+	err = hub.AddClient(client)
+	log.Printf("adding client to Hub with ID: %v", hub.ID)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	fmt.Println(Hubs)
+
 	for {
-		// Read message from browser
-		msgType, msg, err := conn.ReadMessage()
-		check(err)
+		_, msg, err := client.Connection.ReadMessage()
+		if err != nil {
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+				log.Printf("error: %v", err)
+			}
+			break
+		}
+		log.Println(hub.Clients)
+		for _, c := range hub.Clients {
+			if c == nil || c.ID == client.ID {
+				continue
+			}
 
-		// Print the message to the console
-		fmt.Printf("%s sent: %s\n", conn.RemoteAddr(), string(msg))
-
-		// Write message back to browser
-		if err = conn.WriteMessage(msgType, msg); err != nil {
-			return
+			log.Printf("writing to client with ID %v", c.ID)
+			c.Connection.WriteMessage(websocket.TextMessage, msg)
 		}
 	}
 }
 
 func main() {
-	http.HandleFunc("/", handler)
+	http.HandleFunc("/games/", Handler)
 
 	http.ListenAndServe(":8080", nil)
 }

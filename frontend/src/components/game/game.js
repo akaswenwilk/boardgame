@@ -21,24 +21,28 @@ class Game extends Component {
     name: ''
   }
 
-  componentWillMount() {
-    socket.newSocket = new WebSocket("ws://localhost:8080");
-    socket.newSocket.onmessage = e => {
-      try {
+  initiateSocket = () => {
+    if (this.context.currentGame && !socket.gameSocket) {
+      socket.gameSocket = new WebSocket(`ws://localhost:8080/games/${this.context.currentGame.id}/users/${this.context.user.id}`);
+      socket.gameSocket.onmessage = e => {
+        console.log(e.data);
         let incoming = JSON.parse(e.data);
-        console.log(this.context.currentGame);
+        console.log('incoming message', incoming);
+        console.log('the test', !_.isEqual(incoming, this.context.currentGame))
         if (this.context.currentGame && (!_.isEqual(incoming, this.context.currentGame))) {
-          console.log('setting game');
           this.context.addGame(incoming);
         }
-      } catch(err) {
-        console.log('got an error', err);
-        console.log('when trying to parse', e.data);
       }
     }
   }
 
+  componentDidUpdate() {
+    this.initiateSocket();
+  }
+
   componentDidMount() {
+    this.initiateSocket();
+
     let { id } = this.props.match.params;
 
     axios.get(`/games/${id}`).then(res => {

@@ -32,6 +32,7 @@ class GlobalStateProvider extends Component {
 
     axios.post(`/games/${this.state.currentGame.id}/players/${this.state.currentGame.current_player_id}/move`, params)
       .then(res => res.data).then(data => {
+        socket.gameSocket.send(JSON.stringify(data));
         this.setState({
           errors: null,
           currentGame: data,
@@ -83,7 +84,6 @@ class GlobalStateProvider extends Component {
 
   addGameHandler = (game, errors = null) => {
     this.setState({ currentGame: game, errors: errors });
-    socket.newSocket.send(JSON.stringify(game));
   }
 
   clearAllHandler = () => {
