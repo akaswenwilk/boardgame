@@ -1,0 +1,17 @@
+setup:
+  addons:
+    - plan: heroku-postgresql
+build:
+  docker:
+    backend: backend/Dockerfile
+    frontend: frontend/Dockerfile
+    websocket: websocket/Dockerfile
+  config:
+    CHOKIDAR_USEPOLLING: true
+    DB_USER: postgres
+    DB_PASSWORD: password
+    DB_HOST: postgres
+    DB_NAME: azul
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: password
+    POSTGRES_DB: azul
