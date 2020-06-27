@@ -14,7 +14,7 @@ class CrossOriginHeaders
       end
 
       Hanami::Logger.new(stream: 'logfile.log').info("the env #{env["REQUEST_METHOD"]}")
-      headers['Access-Control-Allow-Origin'] = 'http://localhost:3001'
+      headers['Access-Control-Allow-Origin'] = ENV['CORS_URL']
       headers["Access-Control-Allow-Methods"] = "*"
       headers["Access-Control-Request-Method"] = '*'
       headers["Access-Control-Allow-Headers"] = "*"
@@ -22,7 +22,7 @@ class CrossOriginHeaders
       return result
     else
       headers = {}
-      headers['Access-Control-Allow-Origin'] = 'http://localhost:3001'
+      headers['Access-Control-Allow-Origin'] = ENV['CORS_URL']
       headers["Access-Control-Allow-Methods"] = "*"
       headers["Access-Control-Request-Method"] = '*'
       headers["Access-Control-Allow-Headers"] = "*"

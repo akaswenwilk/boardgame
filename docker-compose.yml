@@ -16,6 +16,8 @@ services:
       - websocket
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_BACKEND_URL=http://localhost:9292/
+      - REACT_APP_WEBSOCKET_DOMAIN=localhost
   backend:
     container_name: backend
     build:
@@ -32,6 +34,7 @@ services:
       - DB_PASSWORD=password
       - DB_HOST=postgres
       - DB_NAME=azul
+      - CORS_URL=http://localhost:3001
   db:
     image: postgres
     container_name: postgres

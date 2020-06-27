@@ -23,7 +23,7 @@ class Game extends Component {
 
   initiateSocket = () => {
     if (this.context.currentGame && !socket.gameSocket) {
-      socket.gameSocket = new WebSocket(`ws://localhost:8080/games/${this.context.currentGame.id}/users/${this.context.user.id}`);
+      socket.gameSocket = new WebSocket(`ws://${process.env.REACT_APP_WEBSOCKET_DOMAIN}:8080/games/${this.context.currentGame.id}/users/${this.context.user.id}`);
       socket.gameSocket.onmessage = e => {
         console.log(e.data);
         let incoming = JSON.parse(e.data);
