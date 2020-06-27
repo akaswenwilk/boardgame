@@ -24,7 +24,8 @@ class GameList extends PureComponent {
       this.setState({games: newGames});
       this.context.clearErrors();
     }).catch(err => {
-      this.context.addError(err.error_message);
+      let errors = err.response.data.error_message;
+      this.context.addError(errors);
     });
   }
 
@@ -40,8 +41,9 @@ class GameList extends PureComponent {
       this.setState({ games: newGames });
       this.context.clearErrors();
     }).catch(err => {
-      this.context.addError(err.error_message);
-    })
+      let errors = err.response.data.error_message;
+      this.context.addError(errors);
+    });
   }
 
 
@@ -52,7 +54,8 @@ class GameList extends PureComponent {
         this.context.clearErrors();
       }
     }).catch(err => {
-      this.context.addError(err.error_message);
+      let errors = err.response.data.error_message;
+      this.context.addError(errors);
     });
   }
 

@@ -48,7 +48,8 @@ class Game extends Component {
     axios.get(`/games/${id}`).then(res => {
       this.context.addGame(res.data);
     }).catch(err => {
-      this.context.addError(err.error_message);
+      let errors = err.response.data.error_message;
+      this.context.addError(errors);
     });
   }
 
@@ -68,7 +69,10 @@ class Game extends Component {
 
       axios.post(`/games/${id}/players`, params).then(res => res.data).then(data => {
         this.context.addGame(data);
-      }).catch(err => this.context.addError(err.response.data.error_message));
+      }).catch(err => {
+        let errors = err.response.data.error_message;
+        this.context.addError(errors);
+      });
     }
   }
 
@@ -79,7 +83,10 @@ class Game extends Component {
 
     axios.post(`/games/${this.context.currentGame.id}/start`, params).then(res => res.data).then(data => {
       this.context.addGame(data);
-    }).catch(err => this.context.addError(err.error_message));
+    }).catch(err => {
+      let errors = err.response.data.error_message;
+      this.context.addError(errors);
+    });
   }
 
   render() {

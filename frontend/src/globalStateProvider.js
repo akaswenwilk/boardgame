@@ -40,7 +40,7 @@ class GlobalStateProvider extends Component {
           selectedColor: null,
           possibleRows: [],
         });
-      }).catch(err => this.addErrorHandler(err.data));
+      }).catch(err => this.addErrorHandler(err.response.data.error_message));
   }
 
   selectHolderAndColorHandler = (holder, color) => {
@@ -58,7 +58,7 @@ class GlobalStateProvider extends Component {
           selectedColor: color,
           possibleRows: data.possible_rows
         });
-      }).catch(err => this.addErrorHandler(err.data));
+      }).catch(err => this.addErrorHandler(err.response.data.error_message));
   }
 
   canMakeMoveHandler = () => {

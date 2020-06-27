@@ -63,10 +63,9 @@ class Authentication extends Component {
       .then(response => {
         let user = response.data
         this.context.addUser(user)
-      })
-      .catch(response => {
-        let errors = response.data.error_message;
-        this.context.addError(errors)
+      }).catch(err => {
+        let errors = err.response.data.error_message;
+        this.context.addError(errors);
       });
   }
 
@@ -83,20 +82,17 @@ class Authentication extends Component {
           window.localStorage.setItem('user', JSON.stringify(user));
         }
         this.context.addUser(user);
-      })
-      .catch(response => {
-        let errors = response.data.error_message;
+      }).catch(err => {
+        let errors = err.response.data.error_message;
         this.context.addError(errors);
       });
   }
 
   submitHandler = () => {
-    if (!this.context.errors) {
-      if (this.state.mode === 'signup') {
-        this.signup(this.state.email, this.state.password, this.state.passwordConfirmation);
-      } else {
-        this.login(this.state.email, this.state.password);
-      }
+    if (this.state.mode === 'signup') {
+      this.signup(this.state.email, this.state.password, this.state.passwordConfirmation);
+    } else {
+      this.login(this.state.email, this.state.password);
     }
   }
 
@@ -105,11 +101,6 @@ class Authentication extends Component {
     let title = <p>Log in</p>
     let passwordConfirmation = null;
     let buttonText = "Don't have an account? Sign up instead!"
-    let errorText = null;
-
-    if (this.state.errors) {
-      errorText = <p>{this.state.errors}</p>;
-    }
 
     if (this.state.mode === 'signup') {
       title = <p>Sign up</p>
@@ -162,7 +153,6 @@ class Authentication extends Component {
         <button
           onClick={this.submitHandler}
           >submit</button>
-        {errorText}
       </div>
     );
   }

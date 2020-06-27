@@ -99,7 +99,7 @@ class PlayerBoard extends Component {
       if (parsedNegativeSpaces[i]) {
         color = parsedNegativeSpaces[i].color
       }
-      let minus = null;
+      let minus;
       switch (i) {
         case 0:
         case 1:
@@ -113,6 +113,9 @@ class PlayerBoard extends Component {
         case 5:
         case 6:
           minus = <p>-3</p>
+          break;
+        default:
+          minus = null;
           break;
       }
       negativeSpaces.push(
