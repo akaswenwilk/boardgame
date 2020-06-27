@@ -90,7 +90,7 @@ func (hub *Hub) Delete() {
 func (hub *Hub) DeleteClient(userId string) {
 	var emptyClient *Client
 	for i, c := range hub.Clients {
-		if c.userId == userId {
+		if c.ID == userId {
 			hub.Clients[i] = emptyClient
 			break
 		}
@@ -100,7 +100,7 @@ func (hub *Hub) DeleteClient(userId string) {
 func (hub *Hub) AddOrReplaceClient(client *Client) error {
 	err = fmt.Errorf("too many clients in this hub")
 	for i, c := range hub.Clients {
-		if c == nil || c.userId == client.userId {
+		if c == nil || c.ID == client.ID {
 			hub.Clients[i] = client
 			err = nil
 			break

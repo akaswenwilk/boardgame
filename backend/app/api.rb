@@ -39,6 +39,13 @@ class Api < Hanami::API
   get "/games" do
     games = GameService.new.get_all_games
 
+    attributes = games.map do |game|
+      {
+        id: game.id,
+        started: game.started,
+        players: game.players.map(&:user_id)
+      }
+    end
     [200, games.map(&:full_attributes).to_json]
   end
 

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import axios from '../../axios.js';
 import { Redirect } from "react-router-dom";
+import _ from "lodash";
 
 import MyContext from '../../context.js';
 
@@ -12,6 +13,7 @@ class GameList extends PureComponent {
 
   state = {
     games: [],
+    internal: null
   }
 
   createGameHandler = () => {
@@ -49,7 +51,9 @@ class GameList extends PureComponent {
 
   setGames = () => {
     axios.get('/games').then(res => {
-      if (this._isMounted) {
+      console.log('fetching games');
+      if (this._isMounted && !_.isEqual(res.data, this.state.games)) {
+        console.log('setting state', res.data);
         this.setState({ games: res.data });
         this.context.clearErrors();
       }
@@ -63,13 +67,17 @@ class GameList extends PureComponent {
     this._isMounted = true;
 
     this.setGames();
+    this.interval = setInterval(this.setGames, 3000);
   }
 
   componentWillUnmount() {
     this._isMounted = false;
+    console.log('unmounting');
+    clearInterval(this.interval);
   }
 
   render() {
+    console.log('rendering games list');
     if (!this.context.user) {
       return <Redirect to="/" />;
     }
