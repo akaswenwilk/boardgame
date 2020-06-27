@@ -26,9 +26,14 @@ class App extends Component {
     }
 
     let homePage = <Authentication />;
+    let game = <Game />;
+    let gameList = <GameList />;
 
     if (this.context.user) {
       homePage = <Redirect to="/games" />;
+    } else {
+      game = <Redirect to="/" />;
+      gameList = <Redirect to="/" />;
     }
 
     return(
@@ -38,10 +43,10 @@ class App extends Component {
           {error}
           <Switch>
             <Route path="/games/:id">
-              <Game />
+              {game}
             </Route>
             <Route path="/games">
-              <GameList />
+              {gameList}
             </Route>
             <Route path="/">
               {homePage}
