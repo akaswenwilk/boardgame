@@ -48,11 +48,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	defer hub.Delete()
 
 	client := NewClient(conn, userId, gameId)
-	err = hub.AddClient(client)
-	log.Printf("adding client to Hub with ID: %v", hub.ID)
+	err = hub.AddOrReplaceClient(client)
+	defer hub.DeleteClient(userId)
+	defer hub.Delete()
 	if err != nil {
 		log.Println(err)
 		return
