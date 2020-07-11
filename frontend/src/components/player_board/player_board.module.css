@@ -1,7 +1,7 @@
 .Board {
   height: 100%;
   position: relative;
-  border: 1px solid black;
+  margin: 10px;
 }
 
 .Board::after {
@@ -16,6 +16,7 @@
 
 .Active {
   border: 5px solid #0d0;
+  margin: 20px 0;
   height: 100%;
   position: relative;
   font-family: "Andale Mono";
@@ -44,14 +45,21 @@
 }
 
 .PlayingSpaces {
-  border: 1px solid black;
   width: 45%;
   position: absolute;
   text-align: right;
 }
 
+.PlayingSpaces::before {
+  content: '';
+  position: absolute;
+  border-left: 3px solid black;
+  width: 100%;
+  height: 100%;
+  left: 110.5%;
+}
+
 .EndingSpaces {
-  border: 1px solid black;
   width: 45%;
   position: absolute;
   right: 0;

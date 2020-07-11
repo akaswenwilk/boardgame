@@ -8,6 +8,9 @@ class ErrorHandler
       result = @app.call(env)
     rescue => e
       Hanami::Logger.new(stream: 'logfile.log').error(e.inspect)
+      Hanami::Logger.new(stream: 'logfile.log').error("backtrace")
+      e.backtrace.each { |trace| Hanami::Logger.new(stream: 'logfile.log').error(trace.inspect) }
+      
 
       response_body = {
         "error_type" => e.class.name,

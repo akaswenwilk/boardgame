@@ -65,7 +65,7 @@ class GlobalStateProvider extends Component {
           loading: false,
           possibleRows: data.possible_rows
         });
-      }).catch(err => this.addErrorHandler(err.response.data.error_message));
+      }).catch(err => console.log(err) && this.addErrorHandler(err.response.data.error_message));
   }
 
   canMakeMoveHandler = () => {

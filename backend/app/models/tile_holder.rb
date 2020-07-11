@@ -8,6 +8,10 @@ class TileHolder
   end
 
   def attributes
-    { tiles: tiles.map(&:attributes) }
+    begin
+    { tiles: tiles.compact.map(&:attributes) }
+    rescue => e
+      raise StandardError.new(tiles.inspect)
+    end
   end
 end

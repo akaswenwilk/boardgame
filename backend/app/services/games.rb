@@ -89,7 +89,6 @@ class GameService
       game.current_player_id = first_player.id
       game.players.each do |player|
         player.player_board.score_points(game)
-        Hanami::Logger.new(stream: 'logfile.log').info("after scoring #{player.player_board.playing_spaces}")
         game_over ||= true if player.player_board.has_full_row?
       end
       game.distribute_tiles_to_outside_holders

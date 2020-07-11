@@ -65,6 +65,7 @@ class Authentication extends Component {
         let user = response.data
         this.context.addUser(user)
       }).catch(err => {
+        console.log(err);
         let errors = err.response.data.error_message;
         this.context.addError(errors);
       });
@@ -85,6 +86,7 @@ class Authentication extends Component {
         }
         this.context.addUser(user);
       }).catch(err => {
+        console.log(err);
         let errors = err.response.data.error_message;
         this.context.addError(errors);
       });
