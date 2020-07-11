@@ -28,7 +28,9 @@ class OutsideTileHolder extends Component {
     return (
       <div
         className={styles.OutsideTileHolder}>
-        {tiles}
+        <div className={styles.Tiles}>
+          {tiles}
+        </div>
       </div>
     )
   }

@@ -10,7 +10,8 @@ class GlobalStateProvider extends Component {
     currentGame: null,
     selectedHolder: null,
     selectedColor: null,
-    possibleRows: []
+    possibleRows: [],
+    loading: false
   }
 
   componentDidMount() {
@@ -23,6 +24,8 @@ class GlobalStateProvider extends Component {
   }
 
   makeMoveHandler = n => {
+    this.setLoading();
+
     let params = {
       token: this.state.user.token,
       color: this.state.selectedColor,
@@ -32,18 +35,21 @@ class GlobalStateProvider extends Component {
 
     axios.post(`/games/${this.state.currentGame.id}/players/${this.state.currentGame.current_player_id}/move`, params)
       .then(res => res.data).then(data => {
-        socket.gameSocket.send(JSON.stringify(data));
+        //socket.gameSocket.send(JSON.stringify(data));
         this.setState({
           errors: null,
           currentGame: data,
           selectedHolder: null,
           selectedColor: null,
           possibleRows: [],
+          loading: false
         });
-      }).catch(err => this.addErrorHandler(err.response.data.error_message));
+      }).catch(err => console.log(err) && this.addErrorHandler(err.response.data.error_message));
   }
 
   selectHolderAndColorHandler = (holder, color) => {
+    this.setLoading();
+
     let params = {
       token: this.state.user.token,
       color: color,
@@ -56,6 +62,7 @@ class GlobalStateProvider extends Component {
           errors: null,
           selectedHolder: holder,
           selectedColor: color,
+          loading: false,
           possibleRows: data.possible_rows
         });
       }).catch(err => this.addErrorHandler(err.response.data.error_message));
@@ -71,27 +78,50 @@ class GlobalStateProvider extends Component {
   }
 
   addErrorHandler = errorMessage => {
-    this.setState({ errors: errorMessage });
+    this.setState({
+      errors: errorMessage,
+      loading: false
+    });
   }
 
   clearErrorsHandler = () => {
-    this.setState({ errors: null });
+    this.setState({
+      errors: null,
+      loading: false
+    });
   }
 
   addUserHandler = (user, errors = null) => {
-    this.setState({ user: user, errors: errors});
+    this.setState({
+      user: user,
+      loading: false,
+      errors: errors
+    });
   }
 
   addGameHandler = (game, errors = null) => {
-    this.setState({ currentGame: game, errors: errors });
+    this.setState({
+      currentGame: game,
+      loading: false,
+      errors: errors
+    });
   }
 
   clearAllHandler = () => {
     this.setState({
       user: null,
       errors: null,
+      loading: false,
       currentGame: null
     });
+  }
+
+  setLoading = () => {
+    this.setState({ loading: true });
+  }
+
+  removeLoading = () => {
+    this.setState({ loading: false });
   }
 
   render() {
@@ -112,6 +142,9 @@ class GlobalStateProvider extends Component {
           selectedColor: this.state.selectedColor,
           possibleRows: this.state.possibleRows,
           makeMove: this.makeMoveHandler,
+          loading: this.state.loading,
+          setLoading: this.setLoading,
+          removeLoading: this.removeLoading,
         }}>
         {this.props.children}
       </MyContext.Provider>

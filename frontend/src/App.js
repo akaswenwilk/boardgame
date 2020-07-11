@@ -12,6 +12,7 @@ import Authentication from './components/authentication/authentications.js';
 import GameList from './components/games_list/games_list.js';
 import Logout from './components/logout/logout.js';
 import Game from './components/game/game.js';
+import LoadingScreen from './components/loading_screen/loading_screen.js';
 
 class App extends Component {
   render() {
@@ -32,13 +33,19 @@ class App extends Component {
     if (this.context.user) {
       homePage = <Redirect to="/games" />;
     } else {
-      game = <Redirect to="/" />;
+      //game = <Redirect to="/" />;
       gameList = <Redirect to="/" />;
+    }
+
+    let loading = null;
+    if (this.context.loading) {
+      loading = <LoadingScreen />;
     }
 
     return(
       <Router>
         <div>
+          {loading}
           {logout}
           {error}
           <Switch>

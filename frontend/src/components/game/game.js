@@ -22,19 +22,19 @@ class Game extends Component {
   }
 
   initiateSocket = () => {
-    if (!socket.gameSocket) {
-      console.log('making socket');
-      socket.gameSocket = new WebSocket(`ws://${process.env.REACT_APP_WEBSOCKET_DOMAIN}:8080/games/${this.props.match.params.id}/users/${this.context.user.id}`);
-      socket.gameSocket.onmessage = e => {
-        console.log(e.data);
-        let incoming = JSON.parse(e.data);
-        console.log('incoming message', incoming);
-        console.log('the test', !_.isEqual(incoming, this.context.currentGame))
-        if (this.context.currentGame && (!_.isEqual(incoming, this.context.currentGame))) {
-          this.context.addGame(incoming);
-        }
-      }
-    }
+    //if (!socket.gameSocket) {
+      //console.log('making socket');
+      //socket.gameSocket = new WebSocket(`ws://${process.env.REACT_APP_WEBSOCKET_DOMAIN}:8080/games/${this.props.match.params.id}/users/${this.context.user.id}`);
+      //socket.gameSocket.onmessage = e => {
+        //console.log(e.data);
+        //let incoming = JSON.parse(e.data);
+        //console.log('incoming message', incoming);
+        //console.log('the test', !_.isEqual(incoming, this.context.currentGame))
+        //if (this.context.currentGame && (!_.isEqual(incoming, this.context.currentGame))) {
+          //this.context.addGame(incoming);
+        //}
+      //}
+    //}
   }
 
   componentDidUpdate() {
@@ -163,15 +163,19 @@ class Game extends Component {
         <>
           <h1>here's the game! {startGame}</h1>
           <div className={styles.Game}>
-            <div className={styles.Holders}>
-              <div className={styles.CenterTileHolder}>
-                <CenterTileHolder
-                  selectedColor={this.context.selectedHolder === 'center' ? this.context.selectedColor : null}
-                  tiles={JSON.parse(game.center_tile_holder).tiles}/>
+            <div className={styles.Board}>
+              <div className={styles.Holders}>
+                <div className={styles.CenterTileHolder}>
+                  <CenterTileHolder
+                    selectedColor={this.context.selectedHolder === 'center' ? this.context.selectedColor : null}
+                    tiles={JSON.parse(game.center_tile_holder).tiles}/>
+                </div>
+                {outsideTileHolders}
               </div>
-              {outsideTileHolders}
             </div>
-            {players}
+            <div>
+              {players}
+            </div>
           </div>
         </>
       );

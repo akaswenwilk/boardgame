@@ -53,6 +53,7 @@ class Authentication extends Component {
   }
 
   signup = (email, password, passwordConfirmation) => {
+    this.context.setLoading();
     let params = {
       email: email,
       password: password,
@@ -70,6 +71,7 @@ class Authentication extends Component {
   }
 
   login = (email, password) => {
+    this.context.setLoading();
     let params = {
       email: email,
       password: password

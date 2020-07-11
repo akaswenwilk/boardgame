@@ -15,9 +15,10 @@
 }
 
 .Active {
-  border: 5px solid red;
+  border: 5px solid #0d0;
   height: 100%;
   position: relative;
+  font-family: "Andale Mono";
 }
 
 .NegativeSpaces {

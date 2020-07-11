@@ -1,0 +1,41 @@
+.Loading {
+  background-color: gray;
+  opacity: 0.5;
+  height: 100vh;
+  position: absolute;
+  width: 100vw;
+  z-index: 10000;
+}
+
+.Box {
+  height: 300px;
+  width: 300px;
+  background-color: white;
+  position: absolute;
+  bottom: 50%;
+  right: 50%;
+}
+
+.Box::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  height: 20%;
+  width: 20%;
+  border-top: 5px solid black;
+  border-radius: 50%;
+  animation: example 1s linear;
+  animation-iteration-count:infinite;
+}
+
+@keyframes example {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
+}
+
+.Box p {
+  position: absolute;
+  bottom: 50%;
+  right: 50%;
+}

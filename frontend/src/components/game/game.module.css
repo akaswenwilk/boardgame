@@ -2,16 +2,18 @@
   margin: 10px;
   position: relative;
   height: 1700px;
+  margin-bottom: 100px;
 }
 
 .Holders {
   padding: 10px;
   border-radius: 50%;
-  width: 50%;
-  height: 50%;
+  width: 65%;
+  height: 100%;
   margin: 0 auto;
-  position: absolute;
-  right: 4%;
+  padding: 30px;
+  position: relative;
+  left: 90%;
 }
 
 .CenterTileHolder {
@@ -49,4 +51,11 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+.Board {
+  position: sticky;
+  width: 50%;
+  height: 50%;
+  top: 15%;
 }

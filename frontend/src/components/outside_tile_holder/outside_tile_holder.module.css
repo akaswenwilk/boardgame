@@ -3,8 +3,13 @@
   width: 140px;
   padding: 15px;
   text-align: center;
-  border: 1px solid black;
   border-radius: 50%;
+  border: 3px solid tan;
   box-sizing: border-box;
   display: inline-block;
+  background-color: beige;
+}
+
+.Tiles {
+  transform: translateY(10%);
 }
