@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Merienda+One&display=swap');
+
 .Game {
   margin: 10px;
   position: relative;
@@ -42,8 +44,8 @@
   z-index: 1000;
   width: 100%;
   height: 100%;
-  background-color: pink;
-  opacity: 0.9;
+  background-color: #0d0;
+  opacity: 0.8;
 }
 
 .Winner h1 {
@@ -58,4 +60,58 @@
   width: 50%;
   height: 50%;
   top: 15%;
+}
+
+.GameTitle {
+  text-align: center;
+  font-family: "Merienda One";
+}
+
+.AddPlayer {
+  text-align: center;
+  margin-top: 10px;
+  padding: 5px 0;
+}
+
+.AddPlayer label {
+  margin-right: 10px;
+  font-size: 1.25em;
+  vertical-align: middle;
+}
+
+.AddPlayer button {
+  background-color: #438934;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 1.25em;
+  margin-left: 10px;
+}
+
+.AddPlayer button, .AddPlayer input {
+  padding: 5px;
+}
+
+.AddPlayer input {
+  font-size: 1.25em;
+}
+
+.Return {
+  padding: 5px 0;
+  position: absolute;
+  top: 0;
+  margin: 5px;
+  font-weight: bold;
+}
+
+.ReturnLink {
+  text-decoration: none;
+  color: #4376aa;
+  font-size: 1.25em;
+}
+
+.ReturnLink:hover {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #4376ff;
 }

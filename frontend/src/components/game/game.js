@@ -118,7 +118,7 @@ class Game extends Component {
 
       let startGame = null;
 
-      if (game.players.length > 1 && !game.started && !game.winner_name) {
+      if (game.players.length > 1 && !game.started && !game.winner_name && this.context.user.admin) {
         startGame = (
           <button onClick={this.startGameHandler}>Start Game</button>
         );
@@ -164,7 +164,7 @@ class Game extends Component {
 
       gameComponent = (
         <>
-          <h1>here's the game! {startGame}</h1>
+          <h1 className={styles.GameTitle}>Let's Play! {startGame}</h1>
           <div className={styles.Game}>
             <div className={styles.Board}>
               <div className={styles.Holders}>
@@ -226,8 +226,12 @@ class Game extends Component {
 
     return (
       <div>
-        {addPlayer}
-        <Link to="/games">return to games</Link>
+        <div className={styles.AddPlayer}>
+          {addPlayer}
+        </div>
+        <div className={styles.Return}>
+          <Link className={styles.ReturnLink} to="/games">&#8592; return to games</Link>
+        </div>
         <div style={{position: 'relative'}}>
           {winner}
           {gameComponent}

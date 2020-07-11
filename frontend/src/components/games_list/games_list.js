@@ -51,9 +51,7 @@ class GameList extends PureComponent {
 
   setGames = () => {
     axios.get('/games').then(res => {
-      console.log('fetching games');
       if (this._isMounted && !_.isEqual(res.data, this.state.games)) {
-        console.log('setting state', res.data);
         this.setState({ games: res.data });
         this.context.clearErrors();
       }
@@ -72,12 +70,10 @@ class GameList extends PureComponent {
 
   componentWillUnmount() {
     this._isMounted = false;
-    console.log('unmounting');
     clearInterval(this.interval);
   }
 
   render() {
-    console.log('rendering games list');
     if (!this.context.user) {
       return <Redirect to="/" />;
     }
