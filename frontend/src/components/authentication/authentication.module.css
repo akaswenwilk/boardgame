@@ -1,0 +1,34 @@
+.Form {
+  text-align: center;
+}
+
+.Form div {
+  margin-bottom: 15px;
+}
+
+.ChangeForm {
+  margin-right: 15px;
+  color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  text-transform: uppercase;
+  background-color: teal;
+  font-weight: bold;
+}
+
+.Submit {
+  margin-right: 15px;
+  color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  text-transform: uppercase;
+  background-color: #357ec7;
+  font-weight: bold;
+}
+
+.Form button:hover {
+  cursor: pointer;
+  background-color: #95b9c7
+}

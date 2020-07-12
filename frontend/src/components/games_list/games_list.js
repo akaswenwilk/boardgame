@@ -5,6 +5,8 @@ import _ from "lodash";
 
 import MyContext from '../../context.js';
 
+import styles from './games_list.module.css';
+
 import GameListItem from '../games_list_item/games_list_item.js'
 
 class GameList extends PureComponent {
@@ -97,9 +99,9 @@ class GameList extends PureComponent {
     });
 
     return (
-      <div>
+      <div className={styles.GamesList}>
         {createGame}
-        <h1>Hello {this.context.user.email}!</h1>
+        <h1 className={styles.Title}>Hello {this.context.user.email}!</h1>
         {games}
       </div>
     );

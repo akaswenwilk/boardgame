@@ -1,0 +1,27 @@
+.Join {
+  margin-right: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  text-transform: uppercase;
+  background-color: #357ec7;
+  font-weight: bold;
+}
+
+.JoinLink {
+  text-decoration: none;
+  color: white;
+}
+
+.Join:hover {
+  cursor: pointer;
+  background-color: #95b9c7
+}
+
+.Delete {
+  margin-left: 20px;
+}
+
+.Item {
+  margin: 40px;
+}

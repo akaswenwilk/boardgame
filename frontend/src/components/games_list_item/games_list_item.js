@@ -3,11 +3,15 @@ import { Link } from "react-router-dom";
 
 import MyContext from '../../context.js';
 
+import styles from './games_list_item.module.css';
+
 function GameListItem(props) {
   let context = useContext(MyContext);
 
   let joinGame = (
-    <Link to={`/games/${props.game.id}`}
+    <Link
+      className={styles.JoinLink}
+      to={`/games/${props.game.id}`}
     >join</Link>
   );
 
@@ -19,12 +23,25 @@ function GameListItem(props) {
       );
     }
   }
-  return(
-    <div>
-      {joinGame}
-      <span>Game: {props.game.id}</span>
-      <button onClick={props.deleteGameHandler}
+
+  let deleteButton = null;
+
+  if (context.user.admin) {
+    deleteButton = (
+      <button
+        className={styles.Delete}
+        onClick={props.deleteGameHandler}
       >delete</button>
+    );
+  }
+
+  return(
+    <div className={styles.Item}>
+      <span className={styles.Join}>
+        {joinGame}
+      </span>
+      <span>Game: {props.game.id}</span>
+      {deleteButton}
     </div>
   );
 }

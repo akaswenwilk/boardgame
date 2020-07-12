@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import MyContext from '../../context.js';
 import axios from '../../axios.js';
 
+import styles from './authentication.module.css';
+
 class Authentication extends Component {
   static contextType = MyContext;
 
@@ -102,12 +104,12 @@ class Authentication extends Component {
 
 
   render() {
-    let title = <p>Log in</p>
+    let title = <h1>Log in</h1>
     let passwordConfirmation = null;
     let buttonText = "Don't have an account? Sign up instead!"
 
     if (this.state.mode === 'signup') {
-      title = <p>Sign up</p>
+      title = <h1>Sign up</h1>
       passwordConfirmation = (
         <>
           <label>Password Confirmation:</label>
@@ -121,40 +123,52 @@ class Authentication extends Component {
     }
 
     return(
-      <div>
+      <div className={styles.Form}>
         {title}
+        <div>
+          <button
+            className={styles.ChangeForm}
+            onClick={this.changeModeHandler}
+            >
+            {buttonText}
+          </button>
+        </div>
+        <div>
+          <label>email:</label>
+          <input
+            type="text"
+            onChange={this.emailChangeHandler}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                this.submitHandler();
+              }
+            }}
+            value={this.state.email}/>
+        </div>
+        <div>
+          <label>password:</label>
+          <input
+            type="password"
+            onChange={this.passwordChangeHandler}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                this.submitHandler();
+              }
+            }}
+            value={this.state.password}/>
+        </div>
+        <div>
+          {passwordConfirmation}
+        </div>
+        <div>
+          <label>Remember Me</label>
+          <input
+            checked={this.state.rememberMe}
+            onChange={this.handleRememberMe}
+            type="checkbox" />
+        </div>
         <button
-          onClick={this.changeModeHandler}
-          >
-          {buttonText}
-        </button>
-        <label>email:</label>
-        <input
-          type="text"
-          onChange={this.emailChangeHandler}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              this.submitHandler();
-            }
-          }}
-          value={this.state.email}/>
-        <label>password:</label>
-        <input
-          type="password"
-          onChange={this.passwordChangeHandler}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              this.submitHandler();
-            }
-          }}
-          value={this.state.password}/>
-        {passwordConfirmation}
-        <label>Remember Me</label>
-        <input
-          checked={this.state.rememberMe}
-          onChange={this.handleRememberMe}
-          type="checkbox" />
-        <button
+          className={styles.Submit}
           onClick={this.submitHandler}
           >submit</button>
       </div>

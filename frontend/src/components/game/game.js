@@ -22,19 +22,19 @@ class Game extends Component {
   }
 
   initiateSocket = () => {
-    //if (!socket.gameSocket) {
-      //console.log('making socket');
-      //socket.gameSocket = new WebSocket(`ws://${process.env.REACT_APP_WEBSOCKET_DOMAIN}:8080/games/${this.props.match.params.id}/users/${this.context.user.id}`);
-      //socket.gameSocket.onmessage = e => {
-        //console.log(e.data);
-        //let incoming = JSON.parse(e.data);
-        //console.log('incoming message', incoming);
-        //console.log('the test', !_.isEqual(incoming, this.context.currentGame))
-        //if (this.context.currentGame && (!_.isEqual(incoming, this.context.currentGame))) {
-          //this.context.addGame(incoming);
-        //}
-      //}
-    //}
+    if (!socket.gameSocket) {
+      console.log('making socket');
+      socket.gameSocket = new WebSocket(`ws://${process.env.REACT_APP_WEBSOCKET_DOMAIN}:8080/games/${this.props.match.params.id}/users/${this.context.user.id}`);
+      socket.gameSocket.onmessage = e => {
+        console.log(e.data);
+        let incoming = JSON.parse(e.data);
+        console.log('incoming message', incoming);
+        console.log('the test', !_.isEqual(incoming, this.context.currentGame))
+        if (this.context.currentGame && (!_.isEqual(incoming, this.context.currentGame))) {
+          this.context.addGame(incoming);
+        }
+      }
+    }
   }
 
   componentDidUpdate() {
@@ -70,7 +70,7 @@ class Game extends Component {
       }
 
       axios.post(`/games/${id}/players`, params).then(res => res.data).then(data => {
-        //socket.gameSocket.send(JSON.stringify(data));
+        socket.gameSocket.send(JSON.stringify(data));
         this.context.addGame(data);
       }).catch(err => {
         console.log(err);
@@ -86,7 +86,7 @@ class Game extends Component {
     }
 
     axios.post(`/games/${this.context.currentGame.id}/start`, params).then(res => res.data).then(data => {
-      //socket.gameSocket.send(JSON.stringify(data));
+      socket.gameSocket.send(JSON.stringify(data));
       this.context.addGame(data);
     }).catch(err => {
       console.log(err);
