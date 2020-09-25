@@ -39,7 +39,7 @@ services:
     image: postgres
     container_name: postgres
     ports:
-      - '5430:5432'
+      - '5432:5432'
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:

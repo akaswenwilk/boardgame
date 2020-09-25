@@ -61,7 +61,6 @@ class Authentication extends Component {
       password: password,
       password_confirmation: passwordConfirmation
     }
-    console.log('about to sign up')
 
     axios.post('/users', params)
       .then(response => {
