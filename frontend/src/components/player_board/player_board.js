@@ -123,7 +123,9 @@ class PlayerBoard extends Component {
           key={i}
           onClick={() => {
             if (this.activeComponent() && this.context.selectedColor) {
-              this.context.makeMove('negative')
+              if (confirm('are you sure you want to place your tiles in the negative spaces?')) {
+                this.context.makeMove('negative')
+              }
             }
           }}
           className={styles.NegativeSpace}>
