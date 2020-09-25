@@ -1,7 +1,9 @@
 .Board {
   height: 100%;
   position: relative;
-  margin: 10px;
+  margin-bottom: 30px;
+  width: 500px;
+  border: 1px solid rgba(128, 128, 128, 0.2);
 }
 
 .Board::after {
@@ -12,13 +14,18 @@
   top: 0;
   background-color: gray;
   opacity: 0.2;
+  margin-bottom: 30px;
 }
 
 .Active {
-  border: 5px solid #0d0;
-  margin: 20px 0;
+  background: #dbe5c1;
+  border: 5px solid #8a3;
+  box-sizing: border-box;
+  border-radius: 5px;
+  margin-bottom: 30px;
   height: 100%;
   position: relative;
+  width: 500px;
   font-family: "Andale Mono";
 }
 
@@ -26,6 +33,11 @@
   position: absolute;
   bottom: 0;
   width: 100%;
+}
+
+.NegativeSpacesContainer {
+  width: auto;
+  border: 1px solid red;
 }
 
 .NegativeSpaces h6 {
@@ -69,9 +81,14 @@
   position: relative;
 }
 
+.Selectable:hover {
+  border: 2px solid #8a3;
+  box-sizing: border-box;
+}
+
 .Selectable::before {
-  content: '-->';
-  color: magenta;
+  content: '\00bb\00bb';
+  color: #8a3;
   position: absolute;
   left: 0;
   top: 25%;
