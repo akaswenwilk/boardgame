@@ -1,59 +1,56 @@
 version: '3.7'
 
 services:
-  frontend:
-    container_name: frontend
-    stdin_open: true
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    volumes:
-      - './frontend:/app'
-      - '/app/node_modules'
-    ports:
-      - 3001:3000
-    depends_on:
-      - websocket
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-      - REACT_APP_BACKEND_URL=http://localhost:9292/
-      - REACT_APP_WEBSOCKET_DOMAIN=localhost
-  backend:
-    container_name: backend
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    volumes:
-      - './backend:/app'
-    ports:
-      - 9292:9292
-    depends_on:
-      - db
-    environment:
-      - DB_USER=postgres
-      - DB_PASSWORD=password
-      - DB_HOST=postgres
-      - DB_NAME=azul
-      - CORS_URL=http://localhost:3001
-  db:
+  #frontend:
+    #container_name: frontend
+    #stdin_open: true
+    #build:
+      #context: ./frontend
+      #dockerfile: Dockerfile
+    #volumes:
+      #- './frontend:/app'
+      #- '/app/node_modules'
+    #ports:
+      #- 3001:3000
+    #depends_on:
+      #- websocket
+    #environment:
+      #- CHOKIDAR_USEPOLLING=true
+      #- REACT_APP_BACKEND_URL=http://localhost:9292/
+      #- REACT_APP_WEBSOCKET_DOMAIN=localhost
+  #backend:
+    #container_name: backend
+    #build:
+      #context: ./backend
+      #dockerfile: Dockerfile
+    #volumes:
+      #- './backend:/app'
+    #ports:
+      #- 9292:9292
+    #depends_on:
+      #- db
+    #environment:
+      #- DB_USER=postgres
+      #- DB_PASSWORD=password
+      #- DB_HOST=postgres
+      #- DB_NAME=azul
+      #- CORS_URL=http://localhost:3001
+  postgres:
     image: postgres
-    container_name: postgres
     ports:
       - '5432:5432'
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - ./assets/db/structure.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=azul
-  websocket:
-    container_name: socket
-    build:
-      context: ./websocket
-      dockerfile: Dockerfile
-    volumes:
-      - './websocket:/app'
-    ports:
-      - 8080:8080
-volumes:
-  db_data:
+  #websocket:
+    #container_name: socket
+    #build:
+      #context: ./websocket
+      #dockerfile: Dockerfile
+    #volumes:
+      #- './websocket:/app'
+    #ports:
+      #- 8080:8080

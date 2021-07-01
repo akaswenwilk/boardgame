@@ -128,7 +128,7 @@ class PlayerBoard extends Component {
           }}
           className={styles.NegativeSpace}>
           {minus}
-          <Tile color={color} />
+          <Tile className={styles.NegativeSpaceContainer} color={color} />
         </div>
       )
     }
